@@ -1,0 +1,122 @@
+@font-face {
+  font-family: "Neue Montreal";
+  src: url("/fonts/NeueMontreal.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vw: 1440;
+  --multiplier: 100vw;
+  --background: #ece9e4;
+  --text: #020403;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background);
+  font-family: "Neue Montreal", sans-serif;
+  width: 100%;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.transition__webgl__wrapper {
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+  position: fixed;
+  inset: 0;
+}
+
+#webgl {
+  width: 100%;
+  height: 100vh;
+  display: block;
+}
+
+.transition__webgl__title__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  user-select: none;
+}
+
+.transition__webgl__title {
+  color: var(--background);
+  font-size: calc(68 / var(--vw) * var(--multiplier));
+  text-transform: uppercase;
+  transform: translateY(var(--y, 100%));
+  will-change: transform;
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  padding: calc(18 / var(--vw) * var(--multiplier));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--text);
+  color: var(--background);
+  width: 40%;
+  padding: calc(12 / var(--vw) * var(--multiplier))
+    calc(14 / var(--vw) * var(--multiplier));
+  border-radius: 5px;
+}
+
+.nav__title {
+  font-size: calc(18 / var(--vw) * var(--multiplier));
+  text-transform: capitalize;
+}
+
+.nav__link {
+  font-size: calc(14 / var(--vw) * var(--multiplier));
+  padding: calc(8 / var(--vw) * var(--multiplier))
+    calc(12 / var(--vw) * var(--multiplier));
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 768px) {
+  .nav {
+    width: 70%;
+    padding: calc(22 / var(--vw) * var(--multiplier))
+      calc(24 / var(--vw) * var(--multiplier));
+  }
+
+  .nav__title {
+    font-size: calc(48 / var(--vw) * var(--multiplier));
+  }
+
+  .nav__link {
+    font-size: calc(34 / var(--vw) * var(--multiplier));
+    padding: calc(12 / var(--vw) * var(--multiplier))
+      calc(16 / var(--vw) * var(--multiplier));
+    border-radius: 3px;
+  }
+}

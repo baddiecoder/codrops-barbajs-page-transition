@@ -1,23 +1,30 @@
+---
+import "../styles/app.css";
+import Header from "../components/header.astro";
+const { uid } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro Basics</title>
+  </head>
+  <body data-barba="wrapper">
+    <Header />
+    <div data-barba="container" data-barba-namespace={uid} class="page">
+      <slot />
+    </div>
+    <div class="transition__webgl__wrapper">
+      <div class="transition__webgl__title__wrapper">
+        <h1 class="transition__webgl__title" style="--y: 100%"></h1>
+      </div>
+      <canvas id="webgl"></canvas>
+    </div>
+    <script src="../scripts/app.js"></script>
+  </body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

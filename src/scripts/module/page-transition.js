@@ -1,0 +1,121 @@
+import * as THREE from "three";
+import vertexShader from "../shader/vertex.glsl";
+import fragmentShader from "../shader/fragment.glsl";
+
+class PageTransition {
+  constructor() {
+    this.element = document.getElementById("webgl");
+    this.wrapper = document.querySelector(".transition__webgl__wrapper");
+    this.title = document.querySelector(".transition__webgl__title");
+
+    this.dimension = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      pixelRatio: Math.min(window.devicePixelRatio, 2),
+    };
+
+    this.cameraZ = 100;
+
+    this.createScene();
+    this.createCamera();
+    this.createRenderer();
+    this.createGeometry();
+    this.createMesh();
+
+    this.updateMeshSize();
+
+    this.addEventListener();
+
+    this.render();
+  }
+
+  createScene() {
+    this.scene = new THREE.Scene();
+  }
+
+  createCamera() {
+    const fov =
+      2 * Math.atan(this.dimension.height / 2 / this.cameraZ) * (180 / Math.PI);
+    this.camera = new THREE.PerspectiveCamera(
+      fov,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+
+    this.scene.add(this.camera);
+
+    this.camera.position.z = this.cameraZ;
+  }
+
+  createRenderer() {
+    this.renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      canvas: this.element,
+    });
+
+    this.renderer.setSize(this.dimension.width, this.dimension.height);
+    this.renderer.render(this.scene, this.camera);
+
+    this.renderer.setPixelRatio(this.dimension.pixelRatio);
+  }
+
+  createGeometry() {
+    this.geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+  }
+
+  createMesh() {
+    this.material = new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: {
+          value: new THREE.Color(0xfa6800),
+        },
+        uProgress: {
+          value: 2.1,
+        },
+      },
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+    });
+
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+    this.scene.add(this.mesh);
+  }
+
+  updateMeshSize() {
+    this.mesh.scale.set(this.dimension.width, this.dimension.height, 1);
+  }
+
+  onResize() {
+    this.dimension.width = window.innerWidth;
+    this.dimension.height = window.innerHeight;
+    this.dimension.pixelRatio = Math.min(window.devicePixelRatio, 2);
+
+    // Resize camera
+    this.camera.aspect = this.dimension.width / this.dimension.height;
+    this.camera.fov =
+      2 * Math.atan(this.dimension.height / 2 / this.cameraZ) * (180 / Math.PI);
+    this.camera.updateProjectionMatrix();
+
+    // Resize renderer
+    this.renderer.setSize(this.dimension.width, this.dimension.height);
+    this.renderer.setPixelRatio(this.dimension.pixelRatio);
+
+    this.updateMeshSize();
+  }
+
+  addEventListener() {
+    window.addEventListener("resize", this.onResize.bind(this));
+  }
+
+  render() {
+    this.renderer.render(this.scene, this.camera);
+
+    requestAnimationFrame(this.render.bind(this));
+  }
+}
+
+export default PageTransition;
