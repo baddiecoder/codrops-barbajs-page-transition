@@ -2,7 +2,7 @@ import * as THREE from "three";
 import vertexShader from "../shader/vertex.glsl";
 import fragmentShader from "../shader/fragment.glsl";
 
-class PageTransition {
+class WebGLPageTransition {
   constructor() {
     this.element = document.getElementById("webgl");
     this.wrapper = document.querySelector(".transition__webgl__wrapper");
@@ -118,4 +118,4 @@ class PageTransition {
   }
 }
 
-export default PageTransition;
+export default WebGLPageTransition;

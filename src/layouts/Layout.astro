@@ -16,8 +16,10 @@ const { uid } = Astro.props;
   </head>
   <body data-barba="wrapper">
     <Header />
-    <div data-barba="container" data-barba-namespace={uid} class="page">
-      <slot />
+    <div data-barba="container" data-barba-namespace={uid} class="app__wrapper">
+      <main class="content__wrapper">
+        <slot />
+      </main>
     </div>
     <div class="transition__webgl__wrapper">
       <div class="transition__webgl__title__wrapper">

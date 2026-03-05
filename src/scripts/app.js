@@ -1,23 +1,30 @@
 import gsap from "gsap";
-import PageTransition from "./module/page-transition";
 import barba from "@barba/core";
+import Scroll from "./lib/scroll";
+import WebGLPageTransition from "./module/webgl-page-transition";
 
 class App {
   constructor() {
-    this.pageTransition = new PageTransition();
+    this.scroll = new Scroll();
+    this.scroll.init();
+
+    this.webglPageTransition = new WebGLPageTransition();
 
     barba.init({
       debug: true,
       transitions: [
         {
           name: "default-transition",
+          before: () => {
+            this.scroll.stop();
+          },
           leave: (data) => {
             const destinationPath =
               data.next.url.path === "/"
                 ? "home"
                 : data.next.url.path.split("/").filter(Boolean).pop();
 
-            this.pageTransition.title.textContent = destinationPath;
+            this.webglPageTransition.title.textContent = destinationPath;
 
             const tl = gsap.timeline({
               defaults: {
@@ -26,20 +33,20 @@ class App {
               },
             });
 
-            gsap.set(this.pageTransition.wrapper, {
+            gsap.set(this.webglPageTransition.wrapper, {
               pointerEvents: "auto",
             });
 
-            gsap.set(this.pageTransition.title, {
+            gsap.set(this.webglPageTransition.title, {
               "--y": "100%",
             });
 
-            tl.to(this.pageTransition.mesh.material.uniforms.uProgress, {
+            tl.to(this.webglPageTransition.mesh.material.uniforms.uProgress, {
               value: -0.15,
             });
 
             tl.to(
-              this.pageTransition.title,
+              this.webglPageTransition.title,
               {
                 "--y": "0%",
                 duration: 0.75,
@@ -50,11 +57,14 @@ class App {
 
             return new Promise((resolve) => {
               tl.call(() => {
+                this.scroll.destroy();
                 resolve();
               });
             });
           },
           after: () => {
+            this.scroll.init();
+            this.scroll.scrollTop();
             const tl = gsap.timeline({
               defaults: {
                 duration: 1.25,
@@ -62,14 +72,14 @@ class App {
               },
             });
 
-            tl.to(this.pageTransition.title, {
+            tl.to(this.webglPageTransition.title, {
               "--y": "-100%",
               duration: 0.75,
               ease: "power2.inOut",
             });
 
             tl.to(
-              this.pageTransition.mesh.material.uniforms.uProgress,
+              this.webglPageTransition.mesh.material.uniforms.uProgress,
               {
                 value: 2.1,
               },
@@ -78,7 +88,7 @@ class App {
 
             return new Promise((resolve) => {
               tl.call(() => {
-                gsap.set(this.pageTransition.wrapper, {
+                gsap.set(this.webglPageTransition.wrapper, {
                   pointerEvents: "none",
                 });
                 resolve();
@@ -92,5 +102,14 @@ class App {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "instant",
+  });
+
   new App();
 });
