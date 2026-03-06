@@ -2,11 +2,20 @@ import gsap from "gsap";
 import barba from "@barba/core";
 import Scroll from "./lib/scroll";
 import WebGLPageTransition from "./module/webgl-page-transition";
+import DrawSVGPlugin from "gsap/DrawSVGPlugin";
+import Header from "./module/header";
 
 class App {
   constructor() {
     this.scroll = new Scroll();
     this.scroll.init();
+
+    this.animationConfig = {
+      duration: 1.5,
+      ease: "power1.inOut",
+    };
+
+    this.header = new Header();
 
     this.webglPageTransition = new WebGLPageTransition();
 
@@ -18,42 +27,21 @@ class App {
           before: () => {
             this.scroll.stop();
           },
-          leave: (data) => {
-            const destinationPath =
-              data.next.url.path === "/"
-                ? "home"
-                : data.next.url.path.split("/").filter(Boolean).pop();
-
-            this.webglPageTransition.title.textContent = destinationPath;
-
+          leave: () => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1.25,
-                ease: "power2.inOut",
+                ...this.animationConfig,
               },
             });
 
             gsap.set(this.webglPageTransition.wrapper, {
               pointerEvents: "auto",
-            });
-
-            gsap.set(this.webglPageTransition.title, {
-              "--y": "100%",
+              autoAlpha: 1,
             });
 
             tl.to(this.webglPageTransition.mesh.material.uniforms.uProgress, {
               value: -0.15,
             });
-
-            tl.to(
-              this.webglPageTransition.title,
-              {
-                "--y": "0%",
-                duration: 0.75,
-                ease: "power2.inOut",
-              },
-              "<+0.5",
-            );
 
             return new Promise((resolve) => {
               tl.call(() => {
@@ -62,38 +50,136 @@ class App {
               });
             });
           },
-          after: () => {
+          after: (data) => {
+            const nextPath = data.next.url.path;
+
             this.scroll.init();
             this.scroll.scrollTop();
+
+            if (typeof data.trigger === "string") {
+              this.header.setRouteTransition(nextPath);
+            } else {
+              if (
+                data.trigger.classList.contains("navigation__example__link")
+              ) {
+                this.header.setRouteTransition(nextPath);
+              }
+            }
+
             const tl = gsap.timeline({
               defaults: {
-                duration: 1.25,
-                ease: "power2.inOut",
+                ...this.animationConfig,
               },
             });
 
-            tl.to(this.webglPageTransition.title, {
-              "--y": "-100%",
-              duration: 0.75,
-              ease: "power2.inOut",
+            tl.to(this.webglPageTransition.mesh.material.uniforms.uProgress, {
+              value: 2.1,
             });
-
-            tl.to(
-              this.webglPageTransition.mesh.material.uniforms.uProgress,
-              {
-                value: 2.1,
-              },
-              "<",
-            );
 
             return new Promise((resolve) => {
               tl.call(() => {
                 gsap.set(this.webglPageTransition.wrapper, {
                   pointerEvents: "none",
+                  autoAlpha: 0,
                 });
                 resolve();
               });
             });
+          },
+        },
+        {
+          name: "svg-transition",
+          from: {
+            namespace: ["home__svg", "about__svg"],
+          },
+          to: {
+            namespace: ["home__svg", "about__svg"],
+          },
+          before: () => {
+            this.scroll.stop();
+          },
+          leave: () => {
+            const tl = gsap.timeline({
+              defaults: {
+                ...this.animationConfig,
+              },
+            });
+
+            gsap.set(".transition__svg__wrapper", {
+              autoAlpha: 1,
+              pointerEvents: "all",
+            });
+
+            gsap.set(".svg__transition svg path", {
+              drawSVG: "0% 0%",
+              strokeWidth: 200,
+            });
+
+            tl.to(".svg__transition svg path", {
+              drawSVG: "0% 100%",
+            });
+
+            tl.to(
+              ".svg__transition svg path",
+              {
+                strokeWidth: 900,
+              },
+              "<+=0.25",
+            );
+
+            return new Promise((resolve) =>
+              tl.call(() => {
+                this.scroll.destroy();
+                resolve();
+              }),
+            );
+          },
+          after: (data) => {
+            this.scroll.init();
+            this.scroll.scrollTop();
+
+            if (typeof data.trigger === "string") {
+              this.header.setRouteTransition(nextPath);
+            } else {
+              if (
+                data.trigger.classList.contains("navigation__example__link")
+              ) {
+                this.header.setRouteTransition(nextPath);
+              }
+            }
+
+            const tl = gsap.timeline({
+              defaults: {
+                ...this.animationConfig,
+              },
+            });
+
+            tl.to(".svg__transition svg path", {
+              strokeWidth: 200,
+            });
+
+            tl.to(
+              ".svg__transition svg path",
+              {
+                drawSVG: "100% 100%",
+              },
+              "<+=0.45",
+            );
+
+            return new Promise((resolve) =>
+              tl.call(() => {
+                resolve();
+                gsap.set(".transition__svg__wrapper", {
+                  autoAlpha: 0,
+                  pointerEvents: "none",
+                });
+
+                gsap.set(".svg__transition svg path", {
+                  drawSVG: "0% 0%",
+                  strokeWidth: 200,
+                });
+              }),
+            );
           },
         },
       ],
@@ -110,6 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
     top: 0,
     behavior: "instant",
   });
+
+  gsap.registerPlugin(DrawSVGPlugin);
 
   new App();
 });

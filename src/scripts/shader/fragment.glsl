@@ -32,9 +32,12 @@ float snoise(vec2 v){
 }
 
 void main(){
-  float noise = snoise(vUv * 3.);
+  float noise = snoise(vUv * 2.);
 
-  float disolve = smoothstep(1. - uProgress - 0.185, 1. - uProgress + 0.185, noise);
+  float edge = 0.185;
+
+  float disolve = smoothstep(1. - uProgress - edge, 1. - uProgress + edge, noise);
+  
   float alpha = 1. - disolve;
 
 

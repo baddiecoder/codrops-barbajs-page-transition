@@ -33,7 +33,8 @@ main {
   display: block;
 }
 
-img {
+img,
+svg {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -42,6 +43,11 @@ img {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
 }
 
 body,
@@ -72,6 +78,11 @@ html,
   display: none;
 }
 
+.content {
+  min-height: 100svh;
+  width: 100%;
+}
+
 .transition__webgl__wrapper {
   width: 100%;
   height: 100vh;
@@ -79,6 +90,7 @@ html,
   z-index: 100;
   position: fixed;
   inset: 0;
+  visibility: hidden;
 }
 
 #webgl {
@@ -87,21 +99,24 @@ html,
   display: block;
 }
 
-.transition__webgl__title__wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.transition__svg__wrapper {
+  position: fixed;
+  inset: 0;
   overflow: hidden;
-  user-select: none;
+  z-index: 100;
+  visibility: hidden;
+  pointer-events: none;
+  width: 100%;
+  height: 100vh;
 }
 
-.transition__webgl__title {
-  color: var(--background);
-  font-size: calc(68 / var(--vw) * var(--multiplier));
-  text-transform: uppercase;
-  transform: translateY(var(--y, 100%));
-  will-change: transform;
+.svg__transition {
+  width: 100%;
+  height: 100%;
+}
+
+.svg__transition svg {
+  transform: scale(1.25);
 }
 
 .header {
@@ -138,7 +153,41 @@ html,
   border-radius: 3px;
 }
 
+.navigation__example__container {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  background-color: var(--text);
+  color: var(--background);
+  padding: calc(14 / var(--vw) * var(--multiplier))
+    calc(16 / var(--vw) * var(--multiplier));
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+  max-width: 30%;
+  width: 100%;
+}
+
+.navigation__example__title {
+  font-size: calc(14 / var(--vw) * var(--multiplier));
+  text-transform: capitalize;
+}
+
+.navigation__example__list {
+  display: flex;
+  align-items: center;
+  gap: calc(24 / var(--vw) * var(--multiplier));
+}
+
 @media screen and (max-width: 768px) {
+  .svg__transition svg {
+    width: 150%;
+    transform: scale(2.75);
+  }
+
   .nav {
     width: 70%;
     padding: calc(22 / var(--vw) * var(--multiplier))
@@ -154,5 +203,19 @@ html,
     padding: calc(12 / var(--vw) * var(--multiplier))
       calc(16 / var(--vw) * var(--multiplier));
     border-radius: 3px;
+  }
+
+  .navigation__example__container {
+    padding: calc(24 / var(--vw) * var(--multiplier))
+      calc(26 / var(--vw) * var(--multiplier));
+    max-width: 50%;
+  }
+
+  .navigation__example__title {
+    font-size: calc(34 / var(--vw) * var(--multiplier));
+  }
+
+  .navigation__example__link {
+    font-size: calc(44 / var(--vw) * var(--multiplier));
   }
 }

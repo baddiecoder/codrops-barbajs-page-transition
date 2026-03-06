@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import vertexShader from "../shader/vertex.glsl";
 import fragmentShader from "../shader/fragment.glsl";
+import { hexToRgb, select } from "../utils";
 
 class WebGLPageTransition {
   constructor() {
-    this.element = document.getElementById("webgl");
-    this.wrapper = document.querySelector(".transition__webgl__wrapper");
-    this.title = document.querySelector(".transition__webgl__title");
+    this.element = select("#webgl");
+    this.wrapper = select(".transition__webgl__wrapper");
 
     this.dimension = {
       width: window.innerWidth,
@@ -66,10 +66,15 @@ class WebGLPageTransition {
   }
 
   createMesh() {
+    this.color = hexToRgb("#fa6800");
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         uColor: {
-          value: new THREE.Color(0xfa6800),
+          value: new THREE.Vector3(
+            this.color.r / 255,
+            this.color.g / 255,
+            this.color.b / 255,
+          ),
         },
         uProgress: {
           value: 2.1,

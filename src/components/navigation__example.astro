@@ -1,0 +1,21 @@
+---
+import { examples } from "../scripts/data";
+---
+
+<div class="navigation__example__container">
+  <h1 class="navigation__example__title">select example</h1>
+  <ul class="navigation__example__list">
+    <li class="navigation__example__item">
+      <a href="/" class="navigation__example__link"> 1 </a>
+    </li>
+    {
+      examples.map((ex, idx) => (
+        <li class="navigation__example__item">
+          <a href={`/${ex}`} class="navigation__example__link">
+            {idx + 2}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

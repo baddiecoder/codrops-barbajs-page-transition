@@ -1,3 +1,6 @@
+const select = (selector) => document.querySelector(selector);
+const selectAll = (selector) => document.querySelectorAll(selector);
+
 const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, "");
 
@@ -17,4 +20,4 @@ const hexToRgb = (hex) => {
   return { r, g, b };
 };
 
-export { hexToRgb };
+export { select, selectAll, hexToRgb };
