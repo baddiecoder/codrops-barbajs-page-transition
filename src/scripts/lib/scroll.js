@@ -15,11 +15,11 @@ class Scroll {
       direction: "vertical",
       lerp: 0.1,
       wrapper: document.querySelector(".content__wrapper"),
-      content: document.querySelector(".app__wrapper"),
+      content: document.querySelector(".content"),
     });
 
     this.lenis.on("scroll", ScrollTrigger.update);
-    
+
     this.rafCallback = (time) => {
       this.lenis?.raf(time * 1000);
     };

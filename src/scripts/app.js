@@ -10,11 +10,6 @@ class App {
     this.scroll = new Scroll();
     this.scroll.init();
 
-    this.animationConfig = {
-      duration: 1.5,
-      ease: "power1.inOut",
-    };
-
     this.header = new Header();
 
     this.webglPageTransition = new WebGLPageTransition();
@@ -30,7 +25,8 @@ class App {
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
-                ...this.animationConfig,
+                duration: 1.25,
+                ease: "power2.inOut",
               },
             });
 
@@ -68,7 +64,8 @@ class App {
 
             const tl = gsap.timeline({
               defaults: {
-                ...this.animationConfig,
+                duration: 1.25,
+                ease: "power2.inOut",
               },
             });
 
@@ -88,12 +85,12 @@ class App {
           },
         },
         {
-          name: "svg-transition",
+          name: "example-2-transition",
           from: {
-            namespace: ["home__svg", "about__svg"],
+            namespace: ["home__example__2", "about__example__2"],
           },
           to: {
-            namespace: ["home__svg", "about__svg"],
+            namespace: ["home__example__2", "about__example__2"],
           },
           before: () => {
             this.scroll.stop();
@@ -101,7 +98,8 @@ class App {
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
-                ...this.animationConfig,
+                duration: 1.5,
+                ease: "power1.in",
               },
             });
 
@@ -135,6 +133,8 @@ class App {
             );
           },
           after: (data) => {
+            const nextPath = data.next.url.path;
+
             this.scroll.init();
             this.scroll.scrollTop();
 
@@ -150,7 +150,8 @@ class App {
 
             const tl = gsap.timeline({
               defaults: {
-                ...this.animationConfig,
+                duration: 1.5,
+                ease: "power1.inOut",
               },
             });
 
@@ -181,6 +182,100 @@ class App {
               }),
             );
           },
+        },
+        {
+          name: "example-3-transition",
+          from: {
+            namespace: ["home__example__3", "about__example__3"],
+          },
+          to: {
+            namespace: ["home__example__3", "about__example__3"],
+          },
+          before: (data) => {
+            this.scroll.stop();
+
+            gsap.set(data.next.container, {
+              position: "fixed",
+              inset: 0,
+              scale: 0.656,
+              clipPath: "inset(100% 0 0 0)",
+              zIndex: 3,
+              willChange: "auto",
+            });
+
+            gsap.set(data.current.container, {
+              zIndex: 2,
+              willChange: "auto",
+            });
+          },
+          enter: (data) => {
+            const nextPath = data.next.url.path;
+            const contentCurrent =
+              data.current.container.querySelector(".content__wrapper");
+
+            if (typeof data.trigger === "string") {
+              this.header.setRouteTransition(nextPath);
+            } else {
+              if (
+                data.trigger.classList.contains("navigation__example__link")
+              ) {
+                this.header.setRouteTransition(nextPath);
+              }
+            }
+
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1.25,
+                ease: "power3.inOut",
+              },
+            });
+
+            tl.to(data.current.container, {
+              scale: 0.656,
+              ease: "expo.inOut",
+            });
+
+            tl.to(data.current.container, {
+              opacity: 0.45,
+            });
+
+            tl.to(
+              contentCurrent,
+              {
+                yPercent: -10,
+              },
+              "<",
+            );
+
+            tl.to(
+              data.next.container,
+              {
+                clipPath: "inset(0% 0 0 0)",
+              },
+              "<",
+            );
+
+            tl.to(data.next.container, {
+              scale: 1,
+              ease: "expo.inOut",
+            });
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.scroll.destroy();
+                resolve();
+              });
+            });
+          },
+          after: (data) => {
+            this.scroll.init();
+            this.scroll.scrollTop();
+
+            gsap.set(data.next.container, {
+              clearProps: "all",
+            });
+          },
+          sync: true,
         },
       ],
     });

@@ -11,7 +11,7 @@ class Header {
           : `${example}${baseRoute}`;
       link.dataset.transitionExample =
         example === "/" || example === "/about"
-          ? "webgl"
+          ? "example__1"
           : example.replace("/", "");
     });
   }

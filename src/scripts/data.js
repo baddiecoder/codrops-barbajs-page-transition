@@ -1,1 +1,1 @@
-export const examples = ["svg", "overlapping"];
+export const examples = ["example__2", "example__3"];

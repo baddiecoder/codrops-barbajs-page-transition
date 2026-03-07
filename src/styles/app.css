@@ -22,8 +22,7 @@
 body {
   height: 100svh;
   overflow-x: clip;
-  background-color: var(--background);
-  color: var(--text);
+  background-color: var(--text);
   font-family: "Neue Montreal", sans-serif;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -58,6 +57,11 @@ html,
   -ms-overflow-style: none;
 }
 
+.app__wrapper {
+  background-color: var(--background);
+  color: var(--text);
+}
+
 .content__wrapper {
   width: 100%;
   min-height: 100svh;
@@ -81,6 +85,7 @@ html,
 .content {
   min-height: 100svh;
   width: 100%;
+  height: 200svh;
 }
 
 .transition__webgl__wrapper {
