@@ -20,4 +20,18 @@ const hexToRgb = (hex) => {
   return { r, g, b };
 };
 
-export { select, selectAll, hexToRgb };
+const setClassSplitText = (type) => {
+  return type === "lines"
+    ? {
+        linesClass: "lines",
+      }
+    : type === "words"
+      ? {
+          wordsClass: "words",
+        }
+      : {
+          charsClass: "chars",
+        };
+};
+
+export { select, selectAll, hexToRgb, setClassSplitText };

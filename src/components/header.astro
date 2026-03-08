@@ -17,16 +17,16 @@ const example = pathname.split("/")[1];
     >
       Home
     </a>
-    <h1 class="nav__title">balss</h1>
+    <h1 class="nav__title">codrops</h1>
     <a
       href={!examples.some((example) => pathname.includes(example))
-        ? "/about"
-        : `/${example}/about`}
+        ? "/fauna"
+        : `/${example}/fauna`}
       class="nav__link"
       data-transition-example={example}
-      data-route="/about"
+      data-route="/fauna"
     >
-      About
+      Fauna
     </a>
   </nav>
 </header>

@@ -1,14 +1,24 @@
 import gsap from "gsap";
 import barba from "@barba/core";
 import Scroll from "./lib/scroll";
-import WebGLPageTransition from "./module/webgl-page-transition";
+import WebGLPageTransition from "./components/webgl-page-transition";
 import DrawSVGPlugin from "gsap/DrawSVGPlugin";
-import Header from "./module/header";
+import Header from "./components/header";
+import { select } from "./utils";
+import MotionText from "./components/motion-text";
+import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 class App {
   constructor() {
     this.scroll = new Scroll();
     this.scroll.init();
+
+    this.motionTexts = new MotionText();
+    this.motionTexts.init();
+    this.motionTexts.animationIn();
+
+    this.barbaWrapper = select("[data-barba='wrapper']");
 
     this.header = new Header();
 
@@ -20,6 +30,7 @@ class App {
         {
           name: "default-transition",
           before: () => {
+            this.barbaWrapper.classList.add("is__transitioning");
             this.scroll.stop();
           },
           leave: () => {
@@ -30,17 +41,19 @@ class App {
               },
             });
 
-            gsap.set(this.webglPageTransition.wrapper, {
+            gsap.set("#webgl", {
               pointerEvents: "auto",
               autoAlpha: 1,
+              visibility: "visible",
             });
 
-            tl.to(this.webglPageTransition.mesh.material.uniforms.uProgress, {
+            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
               value: -0.15,
             });
 
             return new Promise((resolve) => {
               tl.call(() => {
+                this.motionTexts.destroy();
                 this.scroll.destroy();
                 resolve();
               });
@@ -49,11 +62,8 @@ class App {
           after: (data) => {
             const nextPath = data.next.url.path;
 
-            this.scroll.init();
-            this.scroll.scrollTop();
-
             if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(nextPath);
+              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
             } else {
               if (
                 data.trigger.classList.contains("navigation__example__link")
@@ -67,18 +77,28 @@ class App {
                 duration: 1.25,
                 ease: "power2.inOut",
               },
+              onComplete: () => {
+                this.scroll.init();
+                this.scroll.scrollTop();
+
+                this.motionTexts.init();
+                this.motionTexts.animationIn();
+
+                gsap.set("#webgl", {
+                  pointerEvents: "none",
+                  autoAlpha: 0,
+                  visibility: "hidden",
+                });
+              },
             });
 
-            tl.to(this.webglPageTransition.mesh.material.uniforms.uProgress, {
+            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
               value: 2.1,
             });
 
             return new Promise((resolve) => {
               tl.call(() => {
-                gsap.set(this.webglPageTransition.wrapper, {
-                  pointerEvents: "none",
-                  autoAlpha: 0,
-                });
+                this.barbaWrapper.classList.remove("is__transitioning");
                 resolve();
               });
             });
@@ -87,12 +107,13 @@ class App {
         {
           name: "example-2-transition",
           from: {
-            namespace: ["home__example__2", "about__example__2"],
+            namespace: ["home__example__2", "fauna__example__2"],
           },
           to: {
-            namespace: ["home__example__2", "about__example__2"],
+            namespace: ["home__example__2", "fauna__example__2"],
           },
           before: () => {
+            this.barbaWrapper.classList.add("is__transitioning");
             this.scroll.stop();
           },
           leave: () => {
@@ -127,6 +148,7 @@ class App {
 
             return new Promise((resolve) =>
               tl.call(() => {
+                this.motionTexts.destroy();
                 this.scroll.destroy();
                 resolve();
               }),
@@ -138,8 +160,10 @@ class App {
             this.scroll.init();
             this.scroll.scrollTop();
 
+            this.motionTexts.init();
+
             if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(nextPath);
+              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
             } else {
               if (
                 data.trigger.classList.contains("navigation__example__link")
@@ -169,7 +193,6 @@ class App {
 
             return new Promise((resolve) =>
               tl.call(() => {
-                resolve();
                 gsap.set(".transition__svg__wrapper", {
                   autoAlpha: 0,
                   pointerEvents: "none",
@@ -179,6 +202,12 @@ class App {
                   drawSVG: "0% 0%",
                   strokeWidth: 200,
                 });
+
+                this.motionTexts.animationIn();
+
+                this.barbaWrapper.classList.remove("is__transitioning");
+
+                resolve();
               }),
             );
           },
@@ -186,13 +215,15 @@ class App {
         {
           name: "example-3-transition",
           from: {
-            namespace: ["home__example__3", "about__example__3"],
+            namespace: ["home__example__3", "fauna__example__3"],
           },
           to: {
-            namespace: ["home__example__3", "about__example__3"],
+            namespace: ["home__example__3", "fauna__example__3"],
           },
           before: (data) => {
             this.scroll.stop();
+
+            this.barbaWrapper.classList.add("is__transitioning");
 
             gsap.set(data.next.container, {
               position: "fixed",
@@ -208,13 +239,16 @@ class App {
               willChange: "auto",
             });
           },
+          leave: () => {
+            this.motionTexts.destroy();
+          },
           enter: (data) => {
             const nextPath = data.next.url.path;
             const contentCurrent =
               data.current.container.querySelector(".content__wrapper");
 
             if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(nextPath);
+              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
             } else {
               if (
                 data.trigger.classList.contains("navigation__example__link")
@@ -271,6 +305,11 @@ class App {
             this.scroll.init();
             this.scroll.scrollTop();
 
+            this.motionTexts.init();
+            this.motionTexts.animationIn();
+
+            this.barbaWrapper.classList.remove("is__transitioning");
+
             gsap.set(data.next.container, {
               clearProps: "all",
             });
@@ -279,6 +318,13 @@ class App {
         },
       ],
     });
+
+    this.render();
+  }
+
+  render() {
+    this.webglPageTransition.render();
+    requestAnimationFrame(this.render.bind(this));
   }
 }
 
@@ -292,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
     behavior: "instant",
   });
 
-  gsap.registerPlugin(DrawSVGPlugin);
+  gsap.registerPlugin(DrawSVGPlugin, SplitText, ScrollTrigger);
 
   new App();
 });

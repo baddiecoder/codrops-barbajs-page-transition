@@ -24,8 +24,11 @@ body {
   overflow-x: clip;
   background-color: var(--text);
   font-family: "Neue Montreal", sans-serif;
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-overflow-style: none;
 }
 
 main {
@@ -44,6 +47,10 @@ a {
   text-decoration: none;
 }
 
+body.is__transitioning a {
+  pointer-events: none;
+}
+
 ul,
 ol {
   list-style: none;
@@ -60,6 +67,7 @@ html,
 .app__wrapper {
   background-color: var(--background);
   color: var(--text);
+  overflow-x: hidden;
 }
 
 .content__wrapper {
@@ -85,22 +93,66 @@ html,
 .content {
   min-height: 100svh;
   width: 100%;
-  height: 200svh;
+  padding: calc(80 / var(--vw) * var(--multiplier))
+    calc(16 / var(--vw) * var(--multiplier))
+    calc(16 / var(--vw) * var(--multiplier));
 }
 
-.transition__webgl__wrapper {
+.content.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100svh;
+}
+
+.title__home {
+  font-size: 18vw;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 0.85;
+}
+
+.description__home {
+  font-size: calc(24 / var(--vw) * var(--multiplier));
+}
+
+.content.fauna {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: auto;
+  gap: calc(16 / var(--vw) * var(--multiplier));
+  row-gap: 5vw;
+  padding-bottom: calc(80 / var(--vw) * var(--multiplier));
+}
+
+.fauna__item {
+  grid-column: var(--c) / span var(--s);
+  grid-row: var(--r);
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 / var(--vw) * var(--multiplier));
+}
+
+.fauna__item__caption__title {
+  font-size: calc(24 / var(--vw) * var(--multiplier));
+}
+
+.fauna__item__image__wrapper {
   width: 100%;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 100;
-  position: fixed;
-  inset: 0;
-  visibility: hidden;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--aspect);
 }
 
 #webgl {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+  pointer-events: none;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* visibility: hidden; */
   display: block;
 }
 
@@ -185,6 +237,16 @@ html,
   display: flex;
   align-items: center;
   gap: calc(24 / var(--vw) * var(--multiplier));
+}
+
+.lines,
+.words,
+.chars {
+  will-change: transform;
+}
+
+[data-motion-text] {
+  visibility: hidden;
 }
 
 @media screen and (max-width: 768px) {

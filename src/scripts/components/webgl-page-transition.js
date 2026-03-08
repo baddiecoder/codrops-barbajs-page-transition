@@ -1,13 +1,10 @@
 import * as THREE from "three";
 import vertexShader from "../shader/vertex.glsl";
 import fragmentShader from "../shader/fragment.glsl";
-import { hexToRgb, select } from "../utils";
+import { hexToRgb } from "../utils";
 
 class WebGLPageTransition {
   constructor() {
-    this.element = select("#webgl");
-    this.wrapper = select(".transition__webgl__wrapper");
-
     this.dimension = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -22,11 +19,11 @@ class WebGLPageTransition {
     this.createGeometry();
     this.createMesh();
 
+    this.onResize();
+
     this.updateMeshSize();
 
     this.addEventListener();
-
-    this.render();
   }
 
   createScene() {
@@ -52,8 +49,11 @@ class WebGLPageTransition {
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
-      canvas: this.element,
     });
+
+    document.body.appendChild(this.renderer.domElement);
+
+    this.renderer.domElement.id = "webgl";
 
     this.renderer.setSize(this.dimension.width, this.dimension.height);
     this.renderer.render(this.scene, this.camera);
@@ -62,7 +62,7 @@ class WebGLPageTransition {
   }
 
   createGeometry() {
-    this.geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    this.geometry = new THREE.PlaneGeometry(1, 1);
   }
 
   createMesh() {
@@ -118,8 +118,6 @@ class WebGLPageTransition {
 
   render() {
     this.renderer.render(this.scene, this.camera);
-
-    requestAnimationFrame(this.render.bind(this));
   }
 }
 
