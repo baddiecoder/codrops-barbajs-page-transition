@@ -8,11 +8,16 @@ import { select } from "./utils";
 import MotionText from "./components/motion-text";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RevealImage from "./components/reveal-image";
 
 class App {
   constructor() {
     this.scroll = new Scroll();
     this.scroll.init();
+
+    this.revealImages = new RevealImage();
+    this.revealImages.init();
+    this.revealImages.animationIn();
 
     this.motionTexts = new MotionText();
     this.motionTexts.init();
@@ -36,92 +41,10 @@ class App {
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1.25,
-                ease: "power2.inOut",
-              },
-            });
-
-            gsap.set("#webgl", {
-              pointerEvents: "auto",
-              autoAlpha: 1,
-              visibility: "visible",
-            });
-
-            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
-              value: -0.15,
-            });
-
-            return new Promise((resolve) => {
-              tl.call(() => {
-                this.motionTexts.destroy();
-                this.scroll.destroy();
-                resolve();
-              });
-            });
-          },
-          after: (data) => {
-            const nextPath = data.next.url.path;
-
-            if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
-            } else {
-              if (
-                data.trigger.classList.contains("navigation__example__link")
-              ) {
-                this.header.setRouteTransition(nextPath);
-              }
-            }
-
-            const tl = gsap.timeline({
-              defaults: {
-                duration: 1.25,
-                ease: "power2.inOut",
-              },
-              onComplete: () => {
-                this.scroll.init();
-                this.scroll.scrollTop();
-
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
-                gsap.set("#webgl", {
-                  pointerEvents: "none",
-                  autoAlpha: 0,
-                  visibility: "hidden",
-                });
-              },
-            });
-
-            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
-              value: 2.1,
-            });
-
-            return new Promise((resolve) => {
-              tl.call(() => {
-                this.barbaWrapper.classList.remove("is__transitioning");
-                resolve();
-              });
-            });
-          },
-        },
-        {
-          name: "example-2-transition",
-          from: {
-            namespace: ["home__example__2", "fauna__example__2"],
-          },
-          to: {
-            namespace: ["home__example__2", "fauna__example__2"],
-          },
-          before: () => {
-            this.barbaWrapper.classList.add("is__transitioning");
-            this.scroll.stop();
-          },
-          leave: () => {
-            const tl = gsap.timeline({
-              defaults: {
                 duration: 1.5,
                 ease: "power1.in",
               },
+              onComplete: () => tl.kill(),
             });
 
             gsap.set(".transition__svg__wrapper", {
@@ -149,6 +72,7 @@ class App {
             return new Promise((resolve) =>
               tl.call(() => {
                 this.motionTexts.destroy();
+                this.revealImages.destroy();
                 this.scroll.destroy();
                 resolve();
               }),
@@ -161,6 +85,7 @@ class App {
             this.scroll.scrollTop();
 
             this.motionTexts.init();
+            this.revealImages.init();
 
             if (typeof data.trigger === "string") {
               this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
@@ -177,6 +102,7 @@ class App {
                 duration: 1.5,
                 ease: "power1.inOut",
               },
+              onComplete: () => tl.kill(),
             });
 
             tl.to(".svg__transition svg path", {
@@ -204,12 +130,106 @@ class App {
                 });
 
                 this.motionTexts.animationIn();
+                this.revealImages.animationIn();
 
                 this.barbaWrapper.classList.remove("is__transitioning");
 
                 resolve();
               }),
             );
+          },
+        },
+        {
+          name: "example-2-transition",
+          from: {
+            namespace: ["home__example__2", "fauna__example__2"],
+          },
+          to: {
+            namespace: ["home__example__2", "fauna__example__2"],
+          },
+          before: () => {
+            this.barbaWrapper.classList.add("is__transitioning");
+            this.scroll.stop();
+          },
+          leave: () => {
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1,
+                ease: "power1.in",
+              },
+              onComplete: () => tl.kill(),
+            });
+
+            gsap.set("#webgl", {
+              pointerEvents: "auto",
+              autoAlpha: 1,
+              visibility: "visible",
+            });
+
+            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
+              value: -0.15,
+            });
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.motionTexts.destroy();
+                this.revealImages.destroy();
+                this.scroll.destroy();
+                resolve();
+              });
+            });
+          },
+          beforeEnter: async () => {
+            await new Promise((resolev) => setTimeout(resolev, 1250));
+          },
+          after: (data) => {
+            const nextPath = data.next.url.path;
+
+            if (typeof data.trigger === "string") {
+              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
+            } else {
+              if (
+                data.trigger.classList.contains("navigation__example__link")
+              ) {
+                this.header.setRouteTransition(nextPath);
+              }
+            }
+
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1,
+                ease: "power1.in",
+              },
+              onComplete: () => {
+                this.scroll.init();
+                this.scroll.scrollTop();
+
+                this.motionTexts.init();
+                this.motionTexts.animationIn();
+
+                this.revealImages.init();
+                this.revealImages.animationIn();
+
+                gsap.set("#webgl", {
+                  pointerEvents: "none",
+                  autoAlpha: 0,
+                  visibility: "hidden",
+                });
+
+                tl.kill();
+              },
+            });
+
+            tl.to(this.webglPageTransition.material.uniforms.uProgress, {
+              value: 1.5,
+            });
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.barbaWrapper.classList.remove("is__transitioning");
+                resolve();
+              });
+            });
           },
         },
         {
@@ -241,6 +261,7 @@ class App {
           },
           leave: () => {
             this.motionTexts.destroy();
+            this.revealImages.destroy();
           },
           enter: (data) => {
             const nextPath = data.next.url.path;
@@ -262,6 +283,7 @@ class App {
                 duration: 1.25,
                 ease: "power3.inOut",
               },
+              onComplete: () => tl.kill(),
             });
 
             tl.to(data.current.container, {
@@ -307,6 +329,9 @@ class App {
 
             this.motionTexts.init();
             this.motionTexts.animationIn();
+
+            this.revealImages.init();
+            this.revealImages.animationIn();
 
             this.barbaWrapper.classList.remove("is__transitioning");
 

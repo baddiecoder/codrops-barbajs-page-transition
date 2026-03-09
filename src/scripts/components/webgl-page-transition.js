@@ -8,7 +8,7 @@ class WebGLPageTransition {
     this.dimension = {
       width: window.innerWidth,
       height: window.innerHeight,
-      pixelRatio: Math.min(window.devicePixelRatio, 2),
+      pixelRatio: Math.min(window.devicePixelRatio, 1),
     };
 
     this.cameraZ = 100;
@@ -77,7 +77,7 @@ class WebGLPageTransition {
           ),
         },
         uProgress: {
-          value: 2.1,
+          value: 1.5,
         },
       },
       vertexShader,
@@ -97,7 +97,7 @@ class WebGLPageTransition {
   onResize() {
     this.dimension.width = window.innerWidth;
     this.dimension.height = window.innerHeight;
-    this.dimension.pixelRatio = Math.min(window.devicePixelRatio, 2);
+    this.dimension.pixelRatio = Math.min(window.devicePixelRatio, 1);
 
     // Resize camera
     this.camera.aspect = this.dimension.width / this.dimension.height;

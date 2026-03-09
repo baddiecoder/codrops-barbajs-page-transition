@@ -83,8 +83,6 @@ class MotionText {
         this.splitTextTween.push(tween);
       },
     );
-
-    console.log(this.splitTextTween);
   }
 
   destroy() {
