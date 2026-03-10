@@ -1,46 +1,17 @@
-# Astro Starter Kit: Basics
+# Grid Layout Transition using GSAP FLIP
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+Animated page transition using Barbajs, GSAP, and Astro
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Installation
 
-## 🚀 Project Structure
+Run this demo on a [local server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Tools_and_setup/set_up_a_local_testing_server).
 
-Inside of your Astro project, you'll see the following folders and files:
+## Credits
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+- Images from [Unsplash](https://unsplash.com)
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Misc
 
-## 🧞 Commands
+Follow _Author_: , [Instagram](https://www.instagram.com/muthahhary_iqbal), [GitHub](https://github.com/Ibaliqbal), [Linkedin](https://www.linkedin.com/in/iqbal-muthahhary)
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Follow Codrops: [X](http://www.x.com/codrops), [Facebook](https://www.facebook.com/codrops), [Instagram](https://www.instagram.com/codropsss/), [LinkedIn](https://www.linkedin.com/company/codrops/), [GitHub](https://github.com/codrops)
