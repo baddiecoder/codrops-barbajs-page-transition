@@ -278,6 +278,14 @@ html,
 }
 
 @media screen and (max-width: 768px) {
+  .content {
+    padding-top: calc(150 / var(--vw) * var(--multiplier));
+  }
+
+  .description__home {
+    font-size: calc(64 / var(--vw) * var(--multiplier));
+  }
+
   .content.fauna {
     display: flex;
     flex-direction: column;
@@ -290,8 +298,7 @@ html,
   }
 
   .svg__transition svg {
-    width: 150%;
-    transform: scale(2.75);
+    transform: scale(2.5);
   }
 
   .nav {
