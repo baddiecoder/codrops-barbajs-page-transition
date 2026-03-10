@@ -9,6 +9,7 @@ import MotionText from "./components/motion-text";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RevealImage from "./components/reveal-image";
+import { CustomEase } from "gsap/CustomEase";
 
 class App {
   constructor() {
@@ -182,19 +183,7 @@ class App {
           beforeEnter: async () => {
             await new Promise((resolev) => setTimeout(resolev, 1250));
           },
-          after: (data) => {
-            const nextPath = data.next.url.path;
-
-            if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
-            } else {
-              if (
-                data.trigger.classList.contains("navigation__example__link")
-              ) {
-                this.header.setRouteTransition(nextPath);
-              }
-            }
-
+          after: () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
@@ -264,19 +253,8 @@ class App {
             this.revealImages.destroy();
           },
           enter: (data) => {
-            const nextPath = data.next.url.path;
             const contentCurrent =
               data.current.container.querySelector(".content__wrapper");
-
-            if (typeof data.trigger === "string") {
-              this.header.setRouteTransition(`/${nextPath.split("/")[1]}`);
-            } else {
-              if (
-                data.trigger.classList.contains("navigation__example__link")
-              ) {
-                this.header.setRouteTransition(nextPath);
-              }
-            }
 
             const tl = gsap.timeline({
               defaults: {
@@ -341,6 +319,81 @@ class App {
           },
           sync: true,
         },
+        {
+          name: "example-4-transition",
+          from: {
+            namespace: ["home__example__4", "fauna__example__4"],
+          },
+          to: {
+            namespace: ["home__example__4", "fauna__example__4"],
+          },
+          before: (data) => {
+            this.barbaWrapper.classList.add("is__transitioning");
+            this.scroll.stop();
+
+            data.next.container.classList.add("example__4");
+            gsap.set(data.next.container, {
+              position: "fixed",
+              inset: 0,
+              clipPath: "polygon(15% 75%, 85% 75%, 85% 75%, 15% 75%)",
+              zIndex: 3,
+              height: "100vh",
+              overflow: "hidden",
+              "--clip": "inset(0 0 0% 0)",
+            });
+          },
+
+          leave: () => {
+            this.motionTexts.destroy();
+            this.revealImages.destroy();
+          },
+          enter: (data) => {
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1.25,
+                ease: "hop",
+              },
+              onComplete: () => tl.kill(),
+            });
+
+            tl.to(data.next.container, {
+              clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+            });
+
+            tl.to(
+              data.next.container,
+              {
+                "--clip": "inset(0 0 100% 0)",
+              },
+              "<+=0.485",
+            );
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.scroll.destroy();
+                resolve();
+              });
+            });
+          },
+          after: (data) => {
+            this.scroll.init();
+            this.scroll.scrollTop();
+
+            this.motionTexts.init();
+            this.motionTexts.animationIn();
+
+            this.revealImages.init();
+            this.revealImages.animationIn();
+
+            this.barbaWrapper.classList.remove("is__transitioning");
+
+            data.next.container.classList.remove("example__4");
+            gsap.set(data.next.container, {
+              clearProps: "all",
+            });
+          },
+          sync: true,
+        },
       ],
     });
 
@@ -363,7 +416,9 @@ document.addEventListener("DOMContentLoaded", () => {
     behavior: "instant",
   });
 
-  gsap.registerPlugin(DrawSVGPlugin, SplitText, ScrollTrigger);
+  gsap.registerPlugin(DrawSVGPlugin, SplitText, ScrollTrigger, CustomEase);
+
+  CustomEase.create("hop", "0.56, 0, 0.35, 0.98");
 
   new App();
 });
