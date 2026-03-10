@@ -18,7 +18,7 @@ float noise(vec2 p){
 }
 
 void main(){
-  float noise = noise(vUv * 4.);
+  float noise = noise(vUv * 5.);
 
   float edge = 0.185;
 

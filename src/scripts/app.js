@@ -100,7 +100,7 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1.5,
-                ease: "power1.inOut",
+                ease: "power1.out",
               },
               onComplete: () => tl.kill(),
             });

@@ -3,11 +3,11 @@ import { SplitText } from "gsap/SplitText";
 import { setClassSplitText } from "../utils";
 
 class MotionText {
-  constructor() {
-    this.elements = [];
-    this.splitText = [];
-    this.splitTextTween = [];
-  }
+  elements = [];
+  splitText = [];
+  splitTextTween = [];
+
+  constructor() {}
 
   init() {
     this.elements = document.querySelectorAll("[data-motion-text]");

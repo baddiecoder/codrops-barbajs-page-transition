@@ -1,10 +1,10 @@
 import gsap from "gsap";
 
 class RevealImage {
-  constructor() {
-    this.elements = [];
-    this.tweens = [];
-  }
+  elements = [];
+  tweens = [];
+
+  constructor() {}
 
   init() {
     const images = document.querySelectorAll("[data-reveal-image]");
@@ -25,38 +25,43 @@ class RevealImage {
   }
 
   animationIn() {
-    this.elements.forEach(({ el, duration, isTriggerByScroll }) => {
+    this.elements.forEach(({ el, duration, isTriggerByScroll }, idx) => {
       let tween;
       const overlay = el.querySelector(".overlay__reveal__image");
 
       if (isTriggerByScroll) {
-        tween = gsap.timeline({
+        const tl = gsap.timeline({
           defaults: {
             duration,
             ease: "power2.inOut",
-            scrollTrigger: {
-              trigger: el,
-              start: `top 95%`,
-              toggleActions: "play none none none",
-              once: true,
-              invalidateOnRefresh: true,
-            },
+          },
+          scrollTrigger: {
+            trigger: el,
+            start: `top 95%`,
+            toggleActions: "play none none none",
+            once: true,
+            invalidateOnRefresh: true,
           },
         });
 
-        tween.fromTo(
+        tl.fromTo(
           el,
           {
             opacity: 0,
           },
           {
             opacity: 1,
+            onStart: () => {
+              console.log("on start ", idx);
+            },
           },
         );
 
-        tween.to(overlay, {
+        tl.to(overlay, {
           opacity: 0,
-        });
+        }, "<+0.5");
+
+        tween = tl;
       } else {
         tween = gsap.timeline({
           defaults: {
@@ -71,7 +76,7 @@ class RevealImage {
 
         tween.to(overlay, {
           opacity: 0,
-        });
+        }, "<+0.5");
       }
 
       this.tweens.push(tween);
