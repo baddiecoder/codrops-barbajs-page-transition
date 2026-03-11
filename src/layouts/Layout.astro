@@ -1,7 +1,6 @@
 ---
 import "../styles/app.css";
 import Header from "../components/header.astro";
-import NavigationExample from "../components/navigation__example.astro";
 const { uid } = Astro.props;
 ---
 
@@ -22,7 +21,6 @@ const { uid } = Astro.props;
         <slot />
       </main>
     </div>
-    <NavigationExample />
     <canvas id="webgl"></canvas>
     <div class="transition__svg__wrapper">
       <div class="svg__transition">

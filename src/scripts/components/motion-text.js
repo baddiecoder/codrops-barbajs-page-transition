@@ -22,10 +22,6 @@ class MotionText {
         const staggers =
           parseFloat(element.getAttribute("data-motion-text-stagger")) || 0.05;
 
-        const triggerByScroll = element.hasAttribute(
-          "data-motion-text-trigger-by-scroll",
-        );
-
         const split = new SplitText(element, {
           type: splitType,
           mask: splitType,
@@ -46,7 +42,6 @@ class MotionText {
           split,
           duration,
           staggers,
-          isTriggerByScroll: triggerByScroll,
           splitType,
         });
       }
@@ -54,35 +49,16 @@ class MotionText {
   }
 
   animationIn() {
-    this.splitText.forEach(
-      ({ el, split, duration, staggers, isTriggerByScroll, splitType }) => {
-        let tween;
-        if (isTriggerByScroll) {
-          tween = gsap.to(split[splitType], {
-            yPercent: 0,
-            duration,
-            stagger: staggers,
-            ease: "power2.inOut",
-            scrollTrigger: {
-              trigger: el,
-              start: `top 95%`,
-              toggleActions: "play none none none",
-              once: true,
-              invalidateOnRefresh: true,
-            },
-          });
-        } else {
-          tween = gsap.to(split[splitType], {
-            yPercent: 0,
-            duration,
-            stagger: staggers,
-            ease: "power2.inOut",
-          });
-        }
+    this.splitText.forEach(({ split, duration, staggers, splitType }) => {
+      const tween = gsap.to(split[splitType], {
+        yPercent: 0,
+        duration,
+        stagger: staggers,
+        ease: "power2.inOut",
+      });
 
-        this.splitTextTween.push(tween);
-      },
-    );
+      this.splitTextTween.push(tween);
+    });
   }
 
   destroy() {
@@ -92,7 +68,6 @@ class MotionText {
 
     this.splitTextTween.forEach((tween) => {
       tween.kill();
-      if (tween.isTriggerByScroll) tween.scrollTrigger?.kill();
     });
 
     this.splitTextTween = [];

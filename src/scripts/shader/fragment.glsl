@@ -28,6 +28,5 @@ void main(){
   
   float alpha = 1. - disolve;
 
-
   gl_FragColor = vec4(uColor, alpha);
 }

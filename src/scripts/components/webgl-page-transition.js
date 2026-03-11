@@ -66,7 +66,7 @@ class WebGLPageTransition {
   }
 
   createMesh() {
-    this.color = hexToRgb("#fa6800");
+    this.color = hexToRgb("#85c79a");
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         uColor: {
