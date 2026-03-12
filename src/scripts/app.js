@@ -12,12 +12,19 @@ class App {
     this.motionTexts.init();
     this.motionTexts.animationIn();
 
+    this.transitionOverlay = select(".transition__overlay");
+
+    this.titleDestination = select(".transition__overlay .title__destination");
+
+    this.splitTitleDestination = null;
+
+    this.getPercentageHalfHeightTextDestination();
+
     this.barbaWrapper = select("[data-barba='wrapper']");
 
     this.webglPageTransition = new WebGLPageTransition();
 
     barba.init({
-      debug: true,
       transitions: [
         {
           name: "default-transition",
@@ -134,7 +141,7 @@ class App {
             });
           },
           beforeEnter: async () => {
-            await new Promise((resolev) => setTimeout(resolev, 1250));
+            await new Promise((resolev) => setTimeout(resolev, 1250)); // Optional
           },
           after: () => {
             const tl = gsap.timeline({
@@ -170,91 +177,113 @@ class App {
         },
         {
           name: "example-3-transition",
-          from: {
-            namespace: ["home__example__3", "fauna__example__3"],
-          },
           to: {
-            namespace: ["home__example__3", "fauna__example__3"],
+            namespace: ["team"],
           },
           before: (data) => {
             this.barbaWrapper.classList.add("is__transitioning");
 
-            gsap.set(data.next.container, {
-              position: "fixed",
-              inset: 0,
-              scale: 0.656,
-              clipPath: "inset(100% 0 0 0)",
-              zIndex: 3,
-              willChange: "auto",
+            this.transitionOverlay.classList.add("team__transition");
+
+            const nextDestination = data.next.url.path
+              .split("/")
+              .filter(Boolean)
+              .pop();
+
+            this.titleDestination.innerHTML = `we're going to ${nextDestination}`;
+
+            if (this.splitTitleDestination) this.splitTitleDestination.revert();
+
+            this.splitTitleDestination = new SplitText(this.titleDestination, {
+              type: "words",
+              mask: "words",
+              wordsClass: "words",
             });
 
-            gsap.set(data.current.container, {
-              zIndex: 2,
-              willChange: "auto",
+            gsap.set(this.transitionOverlay, {
+              "--clip": `polygon(0% ${50 - this.percentageHalfHeightTextDestination}%, 0% ${50 - this.percentageHalfHeightTextDestination}%, 0% ${50 + this.percentageHalfHeightTextDestination}%, 0% ${50 + this.percentageHalfHeightTextDestination}%)`,
             });
           },
           leave: () => {
-            this.motionTexts.destroy();
-          },
-          enter: (data) => {
-            const contentCurrent =
-              data.current.container.querySelector(".content__wrapper");
-
             const tl = gsap.timeline({
               defaults: {
-                duration: 1.25,
-                ease: "power3.inOut",
+                duration: 1,
+                ease: "expo.inOut",
               },
               onComplete: () => tl.kill(),
             });
 
-            tl.to(data.current.container, {
-              scale: 0.656,
-              ease: "expo.inOut",
+            gsap.set(this.transitionOverlay, {
+              pointerEvents: "auto",
+              autoAlpha: 1,
+              visibility: "visible",
             });
 
-            tl.to(data.current.container, {
-              opacity: 0.45,
+            tl.to(this.transitionOverlay, {
+              "--clip": `polygon(0 ${50 - this.percentageHalfHeightTextDestination}%, 100% ${50 - this.percentageHalfHeightTextDestination}%, 100% ${50 + this.percentageHalfHeightTextDestination}%, 0 ${50 + this.percentageHalfHeightTextDestination}%)`,
             });
 
-            tl.to(
-              contentCurrent,
-              {
-                yPercent: -10,
-              },
-              "<",
-            );
-
-            tl.to(
-              data.next.container,
-              {
-                clipPath: "inset(0% 0 0 0)",
-              },
-              "<",
-            );
-
-            tl.to(data.next.container, {
-              scale: 1,
-              ease: "expo.inOut",
+            tl.to(this.transitionOverlay, {
+              "--clip": "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
             });
 
             return new Promise((resolve) => {
               tl.call(() => {
+                this.motionTexts.destroy();
                 resolve();
               });
             });
           },
-          after: (data) => {
-            this.motionTexts.init();
-            this.motionTexts.animationIn();
+          after: () => {
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1,
+                ease: "hop",
+              },
+              onComplete: () => {
+                this.motionTexts.init();
+                this.motionTexts.animationIn();
 
-            this.barbaWrapper.classList.remove("is__transitioning");
+                if (this.splitTitleDestination) {
+                  this.splitTitleDestination.revert();
+                  this.splitTitleDestination = null;
+                }
 
-            gsap.set(data.next.container, {
-              clearProps: "all",
+                gsap.set(this.transitionOverlay, {
+                  pointerEvents: "none",
+                  autoAlpha: 0,
+                  visibility: "hidden",
+                });
+
+                tl.kill();
+              },
+            });
+
+            tl.to(this.splitTitleDestination.words, {
+              yPercent: -120,
+              duration: 0.5,
+              stagger: {
+                amount: 0.25,
+              },
+              ease: "elastic.in(1, 1)",
+            });
+
+            tl.to(
+              this.transitionOverlay,
+              {
+                "--clip": "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+              },
+              "<+0.25",
+            );
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.barbaWrapper.classList.remove("is__transitioning");
+                this.transitionOverlay.classList.remove("team__transition");
+                resolve();
+              });
             });
           },
-          sync: true,
         },
         {
           name: "example-4-transition",
@@ -264,7 +293,7 @@ class App {
           before: (data) => {
             this.barbaWrapper.classList.add("is__transitioning");
 
-            data.next.container.classList.add("example__4");
+            data.next.container.classList.add("contact__transition");
             gsap.set(data.next.container, {
               position: "fixed",
               inset: 0,
@@ -309,7 +338,7 @@ class App {
 
             this.barbaWrapper.classList.remove("is__transitioning");
 
-            data.next.container.classList.remove("example__4");
+            data.next.container.classList.remove("contact__transition");
             gsap.set(data.next.container, {
               clearProps: "all",
             });
@@ -320,6 +349,24 @@ class App {
     });
 
     this.render();
+    
+    this.addEventListeners();
+  }
+
+  getPercentageHalfHeightTextDestination() {
+    const titleDestinationBound = this.titleDestination.getBoundingClientRect();
+    const halfHeightTitleDestination = titleDestinationBound.height / 2;
+    const halfHeightViewport = window.innerHeight / 2;
+    this.percentageHalfHeightTextDestination =
+      (halfHeightTitleDestination / halfHeightViewport) * 50;
+  }
+
+  onResize() {
+    this.getPercentageHalfHeightTextDestination();
+  }
+
+  addEventListeners() {
+    window.addEventListener("resize", this.onResize.bind(this));
   }
 
   render() {

@@ -5,6 +5,10 @@ import { hexToRgb } from "../utils";
 
 class WebGLPageTransition {
   constructor() {
+    const rootStyle = getComputedStyle(document.documentElement);
+
+    this.color = hexToRgb(rootStyle.getPropertyValue("--about-background"));
+
     this.dimension = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -66,7 +70,6 @@ class WebGLPageTransition {
   }
 
   createMesh() {
-    this.color = hexToRgb("#85c79a");
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         uColor: {

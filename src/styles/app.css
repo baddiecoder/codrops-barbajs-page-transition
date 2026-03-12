@@ -11,13 +11,14 @@
   --multiplier: 100vw;
   --base-background: #ece9e4;
   --base-text: #020403;
-  --about-background: #85c79a;
-  --about-text: #edf7bd;
+  --about-background: #5e0006;
+  --about-text: #eed9b9;
   --contact-background: #41431b;
   --contact-text: #e3dbbb;
   --contact-overlay: #aeb784;
-  --team-background: #36656b;
-  --team-text: #dad887;
+  --team-background: #8a7650;
+  --team-text: #ece7d1;
+  --team-overlay: #8e977d;
 }
 
 * {
@@ -42,7 +43,8 @@ main {
   display: block;
 }
 
-img {
+img,
+svg {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -76,17 +78,48 @@ html,
   overflow-x: hidden;
 }
 
-.app__wrapper.example__4::before {
+.app__wrapper.contact__transition::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--contact-overlay);
   z-index: 100;
-  clip-path: var(--clip, inset(0 0 100% 0));
   will-change: clip-path;
+  background-color: var(--contact-overlay);
+  clip-path: var(--clip, inset(0 0 100% 0));
+}
+
+.transition__overlay {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 100;
+  will-change: clip-path;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.transition__overlay.team__transition {
+  background-color: var(--team-overlay);
+  clip-path: var(--clip, polygon(0% 45%, 0% 45%, 0% 55%, 0% 55%));
+}
+
+.transition__overlay .title__destination {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  text-transform: uppercase;
+  font-size: 5vw;
+  color: var(--team-text);
+  text-align: center;
+  line-height: 1;
 }
 
 .content__wrapper {
@@ -180,10 +213,19 @@ html,
 }
 
 @media screen and (max-width: 768px) {
+  .transition__overlay .title__destination {
+    font-size: 7vw;
+  }
+
+  .header {
+    padding: calc(32 / var(--vw) * var(--multiplier))
+      calc(20 / var(--vw) * var(--multiplier));
+  }
+
   .nav {
-    width: 70%;
-    padding: calc(22 / var(--vw) * var(--multiplier))
-      calc(24 / var(--vw) * var(--multiplier));
+    width: 90%;
+    padding: calc(28 / var(--vw) * var(--multiplier))
+      calc(32 / var(--vw) * var(--multiplier));
   }
 
   .nav__title {
