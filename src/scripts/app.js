@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import barba from "@barba/core";
 import WebGLPageTransition from "./components/webgl-page-transition";
-import { select } from "./utils";
+import MorphSVGPlugin from "gsap/MorphSVGPlugin";
 import MotionText from "./components/motion-text";
+import { select } from "./utils";
 import { SplitText } from "gsap/SplitText";
 import { CustomEase } from "gsap/CustomEase";
 
@@ -18,7 +19,7 @@ class App {
 
     this.splitTitleDestination = null;
 
-    this.getPercentageHalfHeightTextDestination();
+    this.getPercentageVerticalClipExample3();
 
     this.barbaWrapper = select("[data-barba='wrapper']");
 
@@ -27,6 +28,10 @@ class App {
     barba.init({
       transitions: [
         {
+          /* Reference 
+            The Site : https://cielrose.tv/about
+            You can take a look preview that transition at inspo.page
+          */
           name: "default-transition",
           before: (data) => {
             this.barbaWrapper.classList.add("is__transitioning");
@@ -107,6 +112,10 @@ class App {
           sync: true,
         },
         {
+          /* Reference
+            The Site : https://www.faint-film.com/
+            You can take a look preview that transition at inspo.page
+          */
           name: "example-2-transition",
           to: {
             namespace: ["about"],
@@ -173,6 +182,10 @@ class App {
           },
         },
         {
+          /* Reference
+            The Site : https://bloomparis.tv/our-services/
+            You can take a look preview that transition at inspo.page
+          */
           name: "example-3-transition",
           to: {
             namespace: ["team"],
@@ -198,7 +211,7 @@ class App {
             });
 
             gsap.set(this.transitionOverlay, {
-              "--clip": `polygon(0% ${50 - this.percentageHalfHeightTextDestination}%, 0% ${50 - this.percentageHalfHeightTextDestination}%, 0% ${50 + this.percentageHalfHeightTextDestination}%, 0% ${50 + this.percentageHalfHeightTextDestination}%)`,
+              "--clip": `polygon(0% ${50 - this.percentageVerticalClip}%, 0% ${50 - this.percentageVerticalClip}%, 0% ${50 + this.percentageVerticalClip}%, 0% ${50 + this.percentageVerticalClip}%)`,
             });
           },
           leave: () => {
@@ -217,7 +230,7 @@ class App {
             });
 
             tl.to(this.transitionOverlay, {
-              "--clip": `polygon(0 ${50 - this.percentageHalfHeightTextDestination}%, 100% ${50 - this.percentageHalfHeightTextDestination}%, 100% ${50 + this.percentageHalfHeightTextDestination}%, 0 ${50 + this.percentageHalfHeightTextDestination}%)`,
+              "--clip": `polygon(0 ${50 - this.percentageVerticalClip}%, 100% ${50 - this.percentageVerticalClip}%, 100% ${50 + this.percentageVerticalClip}%, 0 ${50 + this.percentageVerticalClip}%)`,
             });
 
             tl.to(this.transitionOverlay, {
@@ -283,6 +296,10 @@ class App {
           },
         },
         {
+          /* Reference
+            The Site : https://www.leandra-isler.ch/en
+            You can take a look preview that transition at inspo.page
+          */
           name: "example-4-transition",
           to: {
             namespace: ["contact"],
@@ -342,24 +359,117 @@ class App {
           },
           sync: true,
         },
+        {
+          /* Reference
+            The Site : https://codepen.io/GreenSock/full/EaKpEpJ
+          */
+          name: "example-5-transition",
+          to: {
+            namespace: ["works"],
+          },
+          before: () => {
+            this.barbaWrapper.classList.add("is__transitioning");
+          },
+          leave: () => {
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1,
+                ease: "power2",
+              },
+              onComplete: () => tl.kill(),
+            });
+
+            const path = select(".transition__morph__svg svg path");
+
+            gsap.set(".transition__morph__svg", {
+              pointerEvents: "auto",
+              autoAlpha: 1,
+              visibility: "visible",
+            });
+
+            tl.to(path, {
+              morphSVG: "M 0 100 V 50 Q 50 0 100 50 V 100 z",
+            });
+
+            tl.to(
+              path,
+              {
+                morphSVG: "M 0 100 V 0 Q 50 0 100 0 V 100 z",
+              },
+              "<+=.495",
+            );
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.motionTexts.destroy();
+                resolve();
+              });
+            });
+          },
+          after: () => {
+            const path = select(".transition__morph__svg svg path");
+            const originalPath = path.dataset.originalPath;
+            const tl = gsap.timeline({
+              defaults: {
+                duration: 1,
+                ease: "power2",
+              },
+              onComplete: () => {
+                this.motionTexts.init();
+                this.motionTexts.animationIn();
+
+                gsap.set(".transition__morph__svg", {
+                  pointerEvents: "none",
+                  autoAlpha: 0,
+                  visibility: "hidden",
+                });
+
+                gsap.set(path, {
+                  attr: { d: originalPath },
+                });
+
+                tl.kill();
+              },
+            });
+
+            tl.to(path, {
+              morphSVG: "M 0 0 V 0 Q 50 50 100 0 V 0 z",
+            });
+
+            tl.to(
+              path,
+              {
+                morphSVG: "M 0 0 V 0 Q 50 0 100 0 V 0 z",
+              },
+              "<+=.495",
+            );
+
+            return new Promise((resolve) => {
+              tl.call(() => {
+                this.barbaWrapper.classList.remove("is__transitioning");
+                resolve();
+              });
+            });
+          },
+        },
       ],
     });
 
     this.render();
-    
+
     this.addEventListeners();
   }
 
-  getPercentageHalfHeightTextDestination() {
+  getPercentageVerticalClipExample3() {
     const titleDestinationBound = this.titleDestination.getBoundingClientRect();
     const halfHeightTitleDestination = titleDestinationBound.height / 2;
     const halfHeightViewport = window.innerHeight / 2;
-    this.percentageHalfHeightTextDestination =
+    this.percentageVerticalClip =
       (halfHeightTitleDestination / halfHeightViewport) * 50;
   }
 
   onResize() {
-    this.getPercentageHalfHeightTextDestination();
+    this.getPercentageVerticalClipExample3();
   }
 
   addEventListeners() {
@@ -373,7 +483,7 @@ class App {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  gsap.registerPlugin(SplitText, CustomEase);
+  gsap.registerPlugin(SplitText, CustomEase, MorphSVGPlugin);
 
   CustomEase.create("hop", "0.56, 0, 0.35, 0.98");
 

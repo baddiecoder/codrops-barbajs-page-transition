@@ -11,6 +11,9 @@
   --team-background: #8a7650;
   --team-text: #ece7d1;
   --team-overlay: #8e977d;
+  --works-background: #819067;
+  --works-text: #fefae0;
+  --works-overlay: #b1ab86;
 }
 
 * {
@@ -148,6 +151,11 @@ html,
   color: var(--team-text);
 }
 
+.content.works {
+  background-color: var(--works-background);
+  color: var(--works-text);
+}
+
 #webgl {
   width: 100%;
   height: 100dvh;
@@ -158,6 +166,22 @@ html,
   left: 0;
   visibility: hidden;
   display: block;
+}
+
+.transition__morph__svg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  pointer-events: none;
+  z-index: 100;
+  visibility: hidden;
+}
+
+.transition__morph__svg svg path {
+  fill: var(--works-overlay);
+  stroke: var(--works-overlay);
 }
 
 .header {
