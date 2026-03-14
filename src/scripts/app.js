@@ -140,9 +140,6 @@ class App {
               });
             });
           },
-          beforeEnter: async () => {
-            await new Promise((resolev) => setTimeout(resolev, 1250)); // Optional
-          },
           after: () => {
             const tl = gsap.timeline({
               defaults: {
