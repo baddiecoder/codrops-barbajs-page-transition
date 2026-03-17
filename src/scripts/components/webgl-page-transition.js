@@ -26,8 +26,6 @@ class WebGLPageTransition {
     this.onResize();
 
     this.updateMeshSize();
-
-    this.addEventListener();
   }
 
   createScene() {
@@ -113,10 +111,6 @@ class WebGLPageTransition {
     this.renderer.setPixelRatio(this.dimension.pixelRatio);
 
     this.updateMeshSize();
-  }
-
-  addEventListener() {
-    window.addEventListener("resize", this.onResize.bind(this));
   }
 
   render() {

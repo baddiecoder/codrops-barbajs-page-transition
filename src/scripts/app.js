@@ -388,7 +388,7 @@ class App {
             });
 
             tl.to(path, {
-              morphSVG: "M 0 100 V 50 Q 50 0 100 50 V 100 z",
+              morphSVG: "M 0 100 V 70 Q 50 -50 100 70 V 100 z",
             });
 
             tl.to(
@@ -433,7 +433,7 @@ class App {
             });
 
             tl.to(path, {
-              morphSVG: "M 0 0 V 0 Q 50 50 100 0 V 0 z",
+              morphSVG: "M 0 0 V 0 Q 50 100 100 0 V 0 z",
             });
 
             tl.to(
@@ -470,6 +470,7 @@ class App {
 
   onResize() {
     this.getPercentageVerticalClipExample3();
+    this.webglPageTransition.onResize();
   }
 
   addEventListeners() {

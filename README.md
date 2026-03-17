@@ -2,6 +2,10 @@
 
 Animated page transition using Barbajs, GSAP, and Astro
 
+![Image Title](https://tympanus.net/codrops/wp-content/uploads/2026/03/Banner.png)
+
+[Article on Codrops](https://tympanus.net/codrops/?p=112360)
+
 ## Installation
 
 Run this demo on a [local server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Tools_and_setup/set_up_a_local_testing_server).
