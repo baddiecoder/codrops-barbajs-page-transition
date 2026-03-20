@@ -14,6 +14,9 @@
   --works-background: #819067;
   --works-text: #fefae0;
   --works-overlay: #b1ab86;
+  --archive-background: #777c6d;
+  --archive-text: #cbcbcb;
+  --archive-overlay: #b7b89f;
 }
 
 * {
@@ -151,6 +154,11 @@ html,
   color: var(--team-text);
 }
 
+.content.archive {
+  background-color: var(--archive-background);
+  color: var(--archive-text);
+}
+
 .content.works {
   background-color: var(--works-background);
   color: var(--works-text);
@@ -184,6 +192,31 @@ html,
   stroke: var(--works-overlay);
 }
 
+.transition__svg__wrapper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 100;
+  visibility: hidden;
+  pointer-events: none;
+  width: 100%;
+  height: 100vh;
+  will-change: visibility, pointer-events;
+}
+
+.svg__transition {
+  width: 100%;
+  height: 100%;
+}
+
+.svg__transition svg {
+  transform: scale(1.25);
+}
+
+.svg__transition svg path {
+  stroke: var(--archive-overlay);
+}
+
 .header {
   position: fixed;
   width: 100%;
@@ -191,7 +224,7 @@ html,
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99;
+  z-index: 101;
 }
 
 .nav {
@@ -231,6 +264,10 @@ html,
 @media screen and (max-width: 768px) {
   .transition__overlay .title__destination {
     font-size: 7vw;
+  }
+
+  .svg__transition svg {
+    transform: scale(2.5);
   }
 
   .header {

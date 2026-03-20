@@ -34,4 +34,17 @@ const setClassSplitText = (type) => {
         };
 };
 
-export { select, selectAll, hexToRgb, setClassSplitText };
+const preventLinksMenu = () => {
+  const links = selectAll("a.nav__link");
+
+  links.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const currentPathname = window.location.pathname;
+      const linkPathname = new URL(e.currentTarget.href).pathname;
+
+      if (currentPathname === linkPathname) e.preventDefault();
+    });
+  });
+};
+
+export { select, selectAll, hexToRgb, setClassSplitText, preventLinksMenu };
