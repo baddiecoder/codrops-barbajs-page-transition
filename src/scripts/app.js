@@ -88,19 +88,20 @@ class App {
               )
               .to(data.next.container, {
                 scale: 1,
+                onStart: () => {
+                  this.motionTexts.destroy();
+                  this.motionTexts.init();
+                  this.motionTexts.animationIn();
+                }
               });
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.motionTexts.destroy();
                 resolve();
               });
             });
           },
           after: (data) => {
-            this.motionTexts.init();
-            this.motionTexts.animationIn();
-
             this.barbaWrapper.classList.remove('is__transitioning');
 
             gsap.set(data.next.container, {
