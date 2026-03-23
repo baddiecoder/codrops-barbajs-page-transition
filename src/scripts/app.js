@@ -155,9 +155,6 @@ class App {
                 ease: 'power1.in',
               },
               onComplete: () => {
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
                 gsap.set('#webgl', {
                   pointerEvents: 'none',
                   autoAlpha: 0,
@@ -464,9 +461,6 @@ class App {
                 ease: 'sine.inOut',
               },
               onComplete: () => {
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
                 gsap.set('.transition__svg__wrapper', {
                   pointerEvents: 'none',
                   autoAlpha: 0,

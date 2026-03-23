@@ -62,6 +62,7 @@ class MotionText {
   }
 
   destroy() {
+    if (this.splitText.length === 0 && this.splitTextTween.length === 0) return;
     this.splitText.forEach(({ split }) => {
       split.revert();
     });
