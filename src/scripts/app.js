@@ -188,7 +188,7 @@ class App {
           before: () => {
             this.barbaWrapper.classList.add('is__transitioning');
           },
-          leave: () => {
+          leave: (data) => {
             const tl = gsap.timeline({
               defaults: {
                 duration: 0.7,
@@ -205,13 +205,24 @@ class App {
               visibility: 'visible',
             });
 
+            let enterCurve = 'M 0 100 V 50 Q 50 0 100 50 V 100 z', 
+            filledPath = 'M 0 100 V 0 Q 50 0 100 0 V 100 z';
+
+            if(typeof data.trigger === "string") {
+              enterCurve = 'M 0 0 V 50 Q 50 100 100 50 V 0 z';
+              filledPath = 'M 0 0 V 100 Q 50 100 100 100 V 0 z';
+              gsap.set(path, {
+                attr: { d: 'M 0 0 V 0 Q 50 0 100 0 V 0 z' }
+              })
+            }
+
             tl.to(path, {
-              morphSVG: 'M 0 0 V 0 Q 50 75 100 0 V 0 z',
+              morphSVG: enterCurve,
               // ease: "power2",
             }).to(
               path,
               {
-                morphSVG: 'M 0 0 V 100 Q 50 100 100 100 V 0 z',
+                morphSVG: filledPath,
                 ease: 'power1',
               },
               '<+=.6'
@@ -224,7 +235,7 @@ class App {
               });
             });
           },
-          after: () => {
+          after: (data) => {
             const path = select('.transition__morph__svg svg path');
             const originalPath = path.dataset.originalPath;
             const tl = gsap.timeline({
@@ -233,9 +244,6 @@ class App {
                 ease: 'none',
               },
               onComplete: () => {
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
                 gsap.set('.transition__morph__svg', {
                   pointerEvents: 'none',
                   autoAlpha: 0,
@@ -250,13 +258,25 @@ class App {
               },
             });
 
+            let leaveCurve = 'M 0 0 V 50 Q 50 0 100 50 V 0 z', 
+            unfilledPath = 'M 0 0 V 0 Q 50 0 100 0 V 0 z'
+
+            if(typeof data.trigger === "string") {
+              leaveCurve = 'M 0 100 V 50 Q 50 100 100 50 V 100 z';
+              unfilledPath = 'M 0 100 V 100 Q 50 100 100 100 V 100 z'
+            }
+
             tl.to(path, {
-              morphSVG: 'M 0 0 V 0 Q 50 50 100 0 V 0 z',
+              morphSVG: leaveCurve,
             }).to(
               path,
               {
-                morphSVG: 'M 0 0 V 0 Q 50 0 100 0 V 0 z',
+                morphSVG: unfilledPath,
                 ease: 'power2',
+                onStart: () => {
+                  this.motionTexts.init();
+                  this.motionTexts.animationIn();
+                }
               },
               '<+=.6'
             );
@@ -393,8 +413,7 @@ class App {
         },
         {
           /* Reference
-            The Site : https://www.faint-film.com/
-            You can take a look preview that transition at inspo.page
+            This transition is inspired by a transition from the Osmo page transition course : https://www.osmo.supply/product/page-transition-course
           */
           name: 'example-5-transition',
           to: {
@@ -420,7 +439,7 @@ class App {
 
             gsap.set('.svg__transition svg path', {
               drawSVG: '0% 0%',
-              strokeWidth: 200,
+              attr: {'stroke-width': 200},
               opacity: 0,
             });
 
@@ -440,7 +459,7 @@ class App {
             tl.to(
               '.svg__transition svg path',
               {
-                strokeWidth: 800,
+                attr: { 'stroke-width' : 800 },
                 duration: 1.25,
                 ease: 'sine.inOut',
               },
@@ -469,7 +488,7 @@ class App {
 
                 gsap.set('.svg__transition svg path', {
                   drawSVG: '0% 0%',
-                  strokeWidth: 200,
+                  attr: {'stroke-width': 200},
                 });
 
                 tl.kill();
@@ -477,7 +496,7 @@ class App {
             });
 
             tl.to('.svg__transition svg path', {
-              strokeWidth: 200,
+              attr: { 'stroke-width' : 200 },
             });
 
             tl.to(
