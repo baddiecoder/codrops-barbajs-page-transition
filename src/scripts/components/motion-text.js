@@ -9,8 +9,10 @@ class MotionText {
 
   constructor() {}
 
-  init() {
-    this.elements = document.querySelectorAll("[data-motion-text]");
+  init(container) {
+    this.elements = container
+      ? container.querySelectorAll("[data-motion-text]")
+      : document.querySelectorAll("[data-motion-text]");
     this.elements.forEach((element) => {
       const duration =
         parseFloat(element.getAttribute("data-motion-text-duration")) || 0.6;
@@ -34,7 +36,6 @@ class MotionText {
 
         gsap.set(element, {
           visibility: "visible",
-          autoAlpha: 1,
         });
 
         this.splitText.push({
@@ -62,7 +63,16 @@ class MotionText {
   }
 
   destroy() {
-    if (this.splitText.length === 0 && this.splitTextTween.length === 0) return;
+    if (
+      this.splitText.length === 0 &&
+      this.splitTextTween.length === 0 &&
+      this.elements.length === 0
+    )
+      return;
+
+    this.elements.forEach((el) => {
+      el.dataset.motionText = false;
+    });
     this.splitText.forEach(({ split }) => {
       split.revert();
     });
@@ -70,6 +80,8 @@ class MotionText {
     this.splitTextTween.forEach((tween) => {
       tween.kill();
     });
+
+    // this.ease
 
     this.splitTextTween = [];
     this.elements = [];

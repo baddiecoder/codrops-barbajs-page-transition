@@ -78,7 +78,7 @@ html,
 }
 
 .app__wrapper.contact__transition::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -91,7 +91,7 @@ html,
 }
 
 .transition__overlay {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -258,7 +258,7 @@ html,
   will-change: transform;
 }
 
-[data-motion-text] {
+[data-motion-text="true"] {
   visibility: hidden;
 }
 
