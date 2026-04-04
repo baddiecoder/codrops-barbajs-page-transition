@@ -52,6 +52,8 @@ class App {
             });
           },
           enter: (data) => {
+            this.motionTexts.destroy(); // destroy motion text on current container
+            this.motionTexts.init(data.next.container); // initialization motion text for next container
             const contentCurrent =
               data.current.container.querySelector('.content__wrapper');
 
@@ -89,10 +91,8 @@ class App {
               .to(data.next.container, {
                 scale: 1,
                 onStart: () => {
-                  this.motionTexts.destroy();
-                  this.motionTexts.init();
                   this.motionTexts.animationIn();
-                }
+                },
               });
 
             return new Promise((resolve) => {
@@ -188,11 +188,11 @@ class App {
           before: () => {
             this.barbaWrapper.classList.add('is__transitioning');
           },
-          leave: () => {
+          leave: (data) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 0.7,
-                ease: 'none',
+                duration: 0.5,
+                ease: 'sine.in',
               },
               onComplete: () => tl.kill(),
             });
@@ -205,16 +205,26 @@ class App {
               visibility: 'visible',
             });
 
+            let enterCurve = 'M 0 100 V 50 Q 50 0 100 50 V 100 z',
+              filledPath = 'M 0 100 V 0 Q 50 0 100 0 V 100 z';
+
+            if (typeof data.trigger === 'string') {
+              enterCurve = 'M 0 0 V 50 Q 50 100 100 50 V 0 z';
+              filledPath = 'M 0 0 V 100 Q 50 100 100 100 V 0 z';
+              gsap.set(path, {
+                attr: { d: 'M 0 0 V 0 Q 50 0 100 0 V 0 z' },
+              });
+            }
+
             tl.to(path, {
-              morphSVG: 'M 0 0 V 0 Q 50 75 100 0 V 0 z',
-              // ease: "power2",
+              morphSVG: enterCurve,
             }).to(
               path,
               {
-                morphSVG: 'M 0 0 V 100 Q 50 100 100 100 V 0 z',
-                ease: 'power1',
+                morphSVG: filledPath,
+                ease: 'sine',
               },
-              '<+=.6'
+              '<+=.5'
             );
 
             return new Promise((resolve) => {
@@ -224,18 +234,15 @@ class App {
               });
             });
           },
-          after: () => {
+          after: (data) => {
             const path = select('.transition__morph__svg svg path');
             const originalPath = path.dataset.originalPath;
             const tl = gsap.timeline({
               defaults: {
-                duration: 0.7,
-                ease: 'none',
+                duration: 0.5,
+                ease: 'sine.in',
               },
               onComplete: () => {
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
                 gsap.set('.transition__morph__svg', {
                   pointerEvents: 'none',
                   autoAlpha: 0,
@@ -250,15 +257,27 @@ class App {
               },
             });
 
+            let leaveCurve = 'M 0 0 V 50 Q 50 0 100 50 V 0 z',
+              unfilledPath = 'M 0 0 V 0 Q 50 0 100 0 V 0 z';
+
+            if (typeof data.trigger === 'string') {
+              leaveCurve = 'M 0 100 V 50 Q 50 100 100 50 V 100 z';
+              unfilledPath = 'M 0 100 V 100 Q 50 100 100 100 V 100 z';
+            }
+
             tl.to(path, {
-              morphSVG: 'M 0 0 V 0 Q 50 50 100 0 V 0 z',
+              morphSVG: leaveCurve,
             }).to(
               path,
               {
-                morphSVG: 'M 0 0 V 0 Q 50 0 100 0 V 0 z',
-                ease: 'power2',
+                morphSVG: unfilledPath,
+                ease: 'sine',
+                onStart: () => {
+                  this.motionTexts.init();
+                  this.motionTexts.animationIn();
+                },
               },
-              '<+=.6'
+              '<+=.5'
             );
 
             return new Promise((resolve) => {
@@ -347,9 +366,6 @@ class App {
                 ease: 'hop',
               },
               onComplete: () => {
-                this.motionTexts.init();
-                this.motionTexts.animationIn();
-
                 if (this.splitTitleDestination) {
                   this.splitTitleDestination.revert();
                   this.splitTitleDestination = null;
@@ -378,6 +394,10 @@ class App {
               this.transitionOverlay,
               {
                 '--clip': 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+                onStart: () => {
+                  this.motionTexts.init();
+                  this.motionTexts.animationIn();
+                },
               },
               '<+0.25'
             );
@@ -393,8 +413,7 @@ class App {
         },
         {
           /* Reference
-            The Site : https://www.faint-film.com/
-            You can take a look preview that transition at inspo.page
+            This transition is inspired by a transition from the Osmo page transition course : https://www.osmo.supply/product/page-transition-course
           */
           name: 'example-5-transition',
           to: {
@@ -420,7 +439,7 @@ class App {
 
             gsap.set('.svg__transition svg path', {
               drawSVG: '0% 0%',
-              strokeWidth: 200,
+              attr: { 'stroke-width': 200 },
               opacity: 0,
             });
 
@@ -440,7 +459,7 @@ class App {
             tl.to(
               '.svg__transition svg path',
               {
-                strokeWidth: 800,
+                attr: { 'stroke-width': 800 },
                 duration: 1.25,
                 ease: 'sine.inOut',
               },
@@ -469,7 +488,7 @@ class App {
 
                 gsap.set('.svg__transition svg path', {
                   drawSVG: '0% 0%',
-                  strokeWidth: 200,
+                  attr: { 'stroke-width': 200 },
                 });
 
                 tl.kill();
@@ -477,7 +496,7 @@ class App {
             });
 
             tl.to('.svg__transition svg path', {
-              strokeWidth: 200,
+              attr: { 'stroke-width': 200 },
             });
 
             tl.to(
@@ -520,6 +539,8 @@ class App {
             });
           },
           enter: (data) => {
+            this.motionTexts.destroy(); // destroy motion text on current container
+            this.motionTexts.init(data.next.container); // initialization motion text for next container
             const tl = gsap.timeline({
               defaults: {
                 duration: 1.25,
@@ -536,24 +557,24 @@ class App {
               data.next.container,
               {
                 '--clip': 'inset(0 0 100% 0)',
+                onStart: () => {
+                  this.motionTexts.animationIn();
+                },
               },
-              '<+=0.485'
+              '<+=0.285'
             );
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.motionTexts.destroy();
                 resolve();
               });
             });
           },
           after: (data) => {
-            this.motionTexts.init();
-            this.motionTexts.animationIn();
-
             this.barbaWrapper.classList.remove('is__transitioning');
 
             data.next.container.classList.remove('contact__transition');
+
             gsap.set(data.next.container, {
               clearProps: 'all',
             });
