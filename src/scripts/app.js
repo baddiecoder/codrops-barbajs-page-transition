@@ -1,12 +1,12 @@
-import gsap from 'gsap';
-import barba from '@barba/core';
-import WebGLPageTransition from './components/webgl-page-transition';
-import MorphSVGPlugin from 'gsap/MorphSVGPlugin';
-import MotionText from './components/motion-text';
-import { preventLinksMenu, select } from './utils';
-import { SplitText } from 'gsap/SplitText';
-import { CustomEase } from 'gsap/CustomEase';
-import DrawSVGPlugin from 'gsap/DrawSVGPlugin';
+import gsap from "gsap";
+import barba from "@barba/core";
+import WebGLPageTransition from "./components/webgl-page-transition";
+import MorphSVGPlugin from "gsap/MorphSVGPlugin";
+import MotionText from "./components/motion-text";
+import { preventLinksMenu, select } from "./utils";
+import { SplitText } from "gsap/SplitText";
+import { CustomEase } from "gsap/CustomEase";
+import DrawSVGPlugin from "gsap/DrawSVGPlugin";
 
 class App {
   constructor() {
@@ -14,9 +14,9 @@ class App {
     this.motionTexts.init();
     this.motionTexts.animationIn();
 
-    this.transitionOverlay = select('.transition__overlay');
+    this.transitionOverlay = select(".transition__overlay");
 
-    this.titleDestination = select('.transition__overlay .title__destination');
+    this.titleDestination = select(".transition__overlay .title__destination");
 
     this.splitTitleDestination = null;
 
@@ -33,34 +33,34 @@ class App {
             The Site : https://cielrose.tv/about
             You can take a look preview that transition at inspo.page
           */
-          name: 'default-transition',
+          name: "default-transition",
           before: (data) => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
 
             gsap.set(data.next.container, {
-              position: 'fixed',
+              position: "fixed",
               inset: 0,
               scale: 0.6,
-              clipPath: 'inset(100% 0 0 0)',
+              clipPath: "inset(100% 0 0 0)",
               zIndex: 3,
-              willChange: 'auto',
+              willChange: "auto",
             });
 
             gsap.set(data.current.container, {
               zIndex: 2,
-              willChange: 'auto',
+              willChange: "auto",
             });
           },
           enter: (data) => {
             this.motionTexts.destroy(); // destroy motion text on current container
             this.motionTexts.init(data.next.container); // initialization motion text for next container
             const contentCurrent =
-              data.current.container.querySelector('.content__wrapper');
+              data.current.container.querySelector(".content__wrapper");
 
             const tl = gsap.timeline({
               defaults: {
                 duration: 0.8,
-                ease: 'power3.inOut',
+                ease: "power3.inOut",
               },
               onComplete: () => tl.kill(),
             });
@@ -70,23 +70,23 @@ class App {
             })
               .to(data.current.container, {
                 opacity: 0.45,
-                ease: 'power3',
+                ease: "power3",
               })
               .to(
                 contentCurrent,
                 {
                   yPercent: -10,
-                  ease: 'power3',
+                  ease: "power3",
                 },
-                '<'
+                "<",
               )
               .to(
                 data.next.container,
                 {
-                  clipPath: 'inset(0% 0 0 0)',
-                  ease: 'power3',
+                  clipPath: "inset(0% 0 0 0)",
+                  ease: "power3",
                 },
-                '<'
+                "<",
               )
               .to(data.next.container, {
                 scale: 1,
@@ -102,10 +102,10 @@ class App {
             });
           },
           after: (data) => {
-            this.barbaWrapper.classList.remove('is__transitioning');
+            this.barbaWrapper.classList.remove("is__transitioning");
 
             gsap.set(data.next.container, {
-              clearProps: 'all',
+              clearProps: "all",
             });
           },
           sync: true,
@@ -115,26 +115,26 @@ class App {
             The Site : https://www.faint-film.com/
             You can take a look preview that transition at inspo.page
           */
-          name: 'example-2-transition',
+          name: "example-2-transition",
           to: {
-            namespace: ['about'],
+            namespace: ["about"],
           },
           before: () => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
           },
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'power1.in',
+                ease: "power1.in",
               },
               onComplete: () => tl.kill(),
             });
 
-            gsap.set('#webgl', {
-              pointerEvents: 'auto',
+            gsap.set("#webgl", {
+              pointerEvents: "auto",
               autoAlpha: 1,
-              visibility: 'visible',
+              visibility: "visible",
             });
 
             tl.to(this.webglPageTransition.material.uniforms.uProgress, {
@@ -152,13 +152,13 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'power1.in',
+                ease: "power1.in",
               },
               onComplete: () => {
-                gsap.set('#webgl', {
-                  pointerEvents: 'none',
+                gsap.set("#webgl", {
+                  pointerEvents: "none",
                   autoAlpha: 0,
-                  visibility: 'hidden',
+                  visibility: "hidden",
                 });
 
                 tl.kill();
@@ -171,7 +171,7 @@ class App {
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.barbaWrapper.classList.remove('is__transitioning');
+                this.barbaWrapper.classList.remove("is__transitioning");
                 resolve();
               });
             });
@@ -181,50 +181,40 @@ class App {
           /* Reference
             The Site : https://codepen.io/GreenSock/full/EaKpEpJ
           */
-          name: 'example-3-transition',
+          name: "example-3-transition",
           to: {
-            namespace: ['works'],
+            namespace: ["works"],
           },
           before: () => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
           },
           leave: (data) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 0.5,
-                ease: 'sine.in',
+                duration: 0.7,
+                ease: 'none',
               },
               onComplete: () => tl.kill(),
             });
 
-            const path = select('.transition__morph__svg svg path');
+            const path = select(".transition__morph__svg svg path");
 
-            gsap.set('.transition__morph__svg', {
-              pointerEvents: 'auto',
+            gsap.set(".transition__morph__svg", {
+              pointerEvents: "auto",
               autoAlpha: 1,
-              visibility: 'visible',
+              visibility: "visible",
             });
 
-            let enterCurve = 'M 0 100 V 50 Q 50 0 100 50 V 100 z',
-              filledPath = 'M 0 100 V 0 Q 50 0 100 0 V 100 z';
-
-            if (typeof data.trigger === 'string') {
-              enterCurve = 'M 0 0 V 50 Q 50 100 100 50 V 0 z';
-              filledPath = 'M 0 0 V 100 Q 50 100 100 100 V 0 z';
-              gsap.set(path, {
-                attr: { d: 'M 0 0 V 0 Q 50 0 100 0 V 0 z' },
-              });
-            }
-
             tl.to(path, {
-              morphSVG: enterCurve,
+              morphSVG: 'M 0 0 V 0 Q 50 75 100 0 V 0 z',
+              // ease: "power2",
             }).to(
               path,
               {
-                morphSVG: filledPath,
-                ease: 'sine',
+                morphSVG: 'M 0 0 V 100 Q 50 100 100 100 V 0 z',
+                ease: 'power1',
               },
-              '<+=.5'
+              '<+=.6'
             );
 
             return new Promise((resolve) => {
@@ -234,19 +224,22 @@ class App {
               });
             });
           },
-          after: (data) => {
+          after: () => {
             const path = select('.transition__morph__svg svg path');
             const originalPath = path.dataset.originalPath;
             const tl = gsap.timeline({
               defaults: {
-                duration: 0.5,
-                ease: 'sine.in',
+                duration: 0.7,
+                ease: 'none',
               },
               onComplete: () => {
+                this.motionTexts.init();
+                this.motionTexts.animationIn();
+
                 gsap.set('.transition__morph__svg', {
                   pointerEvents: 'none',
                   autoAlpha: 0,
-                  visibility: 'hidden',
+                  visibility: "hidden",
                 });
 
                 gsap.set(path, {
@@ -257,32 +250,20 @@ class App {
               },
             });
 
-            let leaveCurve = 'M 0 0 V 50 Q 50 0 100 50 V 0 z',
-              unfilledPath = 'M 0 0 V 0 Q 50 0 100 0 V 0 z';
-
-            if (typeof data.trigger === 'string') {
-              leaveCurve = 'M 0 100 V 50 Q 50 100 100 50 V 100 z';
-              unfilledPath = 'M 0 100 V 100 Q 50 100 100 100 V 100 z';
-            }
-
             tl.to(path, {
               morphSVG: leaveCurve,
             }).to(
               path,
               {
-                morphSVG: unfilledPath,
-                ease: 'sine',
-                onStart: () => {
-                  this.motionTexts.init();
-                  this.motionTexts.animationIn();
-                },
+                morphSVG: 'M 0 0 V 0 Q 50 0 100 0 V 0 z',
+                ease: 'power2',
               },
-              '<+=.5'
+              '<+=.6'
             );
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.barbaWrapper.classList.remove('is__transitioning');
+                this.barbaWrapper.classList.remove("is__transitioning");
                 resolve();
               });
             });
@@ -293,17 +274,17 @@ class App {
             The Site : https://bloomparis.tv/our-services/
             You can take a look preview that transition at inspo.page
           */
-          name: 'example-4-transition',
+          name: "example-4-transition",
           to: {
-            namespace: ['team'],
+            namespace: ["team"],
           },
           before: (data) => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
 
-            this.transitionOverlay.classList.add('team__transition');
+            this.transitionOverlay.classList.add("team__transition");
 
             const nextDestination = data.next.url.path
-              .split('/')
+              .split("/")
               .filter(Boolean)
               .pop();
 
@@ -312,13 +293,13 @@ class App {
             if (this.splitTitleDestination) this.splitTitleDestination.revert();
 
             this.splitTitleDestination = new SplitText(this.titleDestination, {
-              type: 'words',
-              mask: 'words',
-              wordsClass: 'words',
+              type: "words",
+              mask: "words",
+              wordsClass: "words",
             });
 
             gsap.set(this.transitionOverlay, {
-              '--clip': `polygon(0% ${50 - this.percentageVerticalClip}%, 0% ${
+              "--clip": `polygon(0% ${50 - this.percentageVerticalClip}%, 0% ${
                 50 - this.percentageVerticalClip
               }%, 0% ${50 + this.percentageVerticalClip}%, 0% ${
                 50 + this.percentageVerticalClip
@@ -329,19 +310,19 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'expo.inOut',
+                ease: "expo.inOut",
               },
               onComplete: () => tl.kill(),
             });
 
             gsap.set(this.transitionOverlay, {
-              pointerEvents: 'auto',
+              pointerEvents: "auto",
               autoAlpha: 1,
-              visibility: 'visible',
+              visibility: "visible",
             });
 
             tl.to(this.transitionOverlay, {
-              '--clip': `polygon(0 ${50 - this.percentageVerticalClip}%, 100% ${
+              "--clip": `polygon(0 ${50 - this.percentageVerticalClip}%, 100% ${
                 50 - this.percentageVerticalClip
               }%, 100% ${50 + this.percentageVerticalClip}%, 0 ${
                 50 + this.percentageVerticalClip
@@ -349,7 +330,7 @@ class App {
             });
 
             tl.to(this.transitionOverlay, {
-              '--clip': 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+              "--clip": "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
             });
 
             return new Promise((resolve) => {
@@ -363,7 +344,7 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'hop',
+                ease: "hop",
               },
               onComplete: () => {
                 if (this.splitTitleDestination) {
@@ -372,9 +353,9 @@ class App {
                 }
 
                 gsap.set(this.transitionOverlay, {
-                  pointerEvents: 'none',
+                  pointerEvents: "none",
                   autoAlpha: 0,
-                  visibility: 'hidden',
+                  visibility: "hidden",
                 });
 
                 tl.kill();
@@ -387,25 +368,21 @@ class App {
               stagger: {
                 amount: 0.25,
               },
-              ease: 'elastic.in(1, 1)',
+              ease: "elastic.in(1, 1)",
             });
 
             tl.to(
               this.transitionOverlay,
               {
                 '--clip': 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-                onStart: () => {
-                  this.motionTexts.init();
-                  this.motionTexts.animationIn();
-                },
               },
-              '<+0.25'
+              "<+0.25",
             );
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.barbaWrapper.classList.remove('is__transitioning');
-                this.transitionOverlay.classList.remove('team__transition');
+                this.barbaWrapper.classList.remove("is__transitioning");
+                this.transitionOverlay.classList.remove("team__transition");
                 resolve();
               });
             });
@@ -415,55 +392,55 @@ class App {
           /* Reference
             This transition is inspired by a transition from the Osmo page transition course : https://www.osmo.supply/product/page-transition-course
           */
-          name: 'example-5-transition',
+          name: "example-5-transition",
           to: {
-            namespace: ['archive'],
+            namespace: ["archive"],
           },
           before: () => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
           },
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'sine.inOut',
+                ease: "sine.inOut",
               },
               onComplete: () => tl.kill(),
             });
 
-            gsap.set('.transition__svg__wrapper', {
-              pointerEvents: 'auto',
+            gsap.set(".transition__svg__wrapper", {
+              pointerEvents: "auto",
               autoAlpha: 1,
-              visibility: 'visible',
+              visibility: "visible",
             });
 
             gsap.set('.svg__transition svg path', {
               drawSVG: '0% 0%',
-              attr: { 'stroke-width': 200 },
+              strokeWidth: 200,
               opacity: 0,
             });
 
-            tl.to('.svg__transition svg path', {
+            tl.to(".svg__transition svg path", {
               opacity: 1,
               duration: 0.5,
             });
 
             tl.to(
-              '.svg__transition svg path',
+              ".svg__transition svg path",
               {
-                drawSVG: '0% 100%',
+                drawSVG: "0% 100%",
               },
-              '<'
+              "<",
             );
 
             tl.to(
-              '.svg__transition svg path',
+              ".svg__transition svg path",
               {
-                attr: { 'stroke-width': 800 },
+                strokeWidth: 800,
                 duration: 1.25,
-                ease: 'sine.inOut',
+                ease: "sine.inOut",
               },
-              '<'
+              "<",
             );
 
             return new Promise((resolve) => {
@@ -477,18 +454,18 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1,
-                ease: 'sine.inOut',
+                ease: "sine.inOut",
               },
               onComplete: () => {
-                gsap.set('.transition__svg__wrapper', {
-                  pointerEvents: 'none',
+                gsap.set(".transition__svg__wrapper", {
+                  pointerEvents: "none",
                   autoAlpha: 0,
-                  visibility: 'hidden',
+                  visibility: "hidden",
                 });
 
                 gsap.set('.svg__transition svg path', {
                   drawSVG: '0% 0%',
-                  attr: { 'stroke-width': 200 },
+                  strokeWidth: 200,
                 });
 
                 tl.kill();
@@ -496,20 +473,20 @@ class App {
             });
 
             tl.to('.svg__transition svg path', {
-              attr: { 'stroke-width': 200 },
+              strokeWidth: 200,
             });
 
             tl.to(
-              '.svg__transition svg path',
+              ".svg__transition svg path",
               {
-                drawSVG: '100% 100%',
+                drawSVG: "100% 100%",
               },
-              '<+=0.45'
+              "<+=0.45",
             );
 
             return new Promise((resolve) => {
               tl.call(() => {
-                this.barbaWrapper.classList.remove('is__transitioning');
+                this.barbaWrapper.classList.remove("is__transitioning");
                 resolve();
               });
             });
@@ -520,22 +497,22 @@ class App {
             The Site : https://www.leandra-isler.ch/en
             You can take a look preview that transition at inspo.page
           */
-          name: 'example-6-transition',
+          name: "example-6-transition",
           to: {
-            namespace: ['contact'],
+            namespace: ["contact"],
           },
           before: (data) => {
-            this.barbaWrapper.classList.add('is__transitioning');
+            this.barbaWrapper.classList.add("is__transitioning");
 
-            data.next.container.classList.add('contact__transition');
+            data.next.container.classList.add("contact__transition");
             gsap.set(data.next.container, {
-              position: 'fixed',
+              position: "fixed",
               inset: 0,
-              clipPath: 'polygon(15% 75%, 85% 75%, 85% 75%, 15% 75%)',
+              clipPath: "polygon(15% 75%, 85% 75%, 85% 75%, 15% 75%)",
               zIndex: 3,
-              height: '100vh',
-              overflow: 'hidden',
-              '--clip': 'inset(0 0 0% 0)',
+              height: "100vh",
+              overflow: "hidden",
+              "--clip": "inset(0 0 0% 0)",
             });
           },
           enter: (data) => {
@@ -544,24 +521,21 @@ class App {
             const tl = gsap.timeline({
               defaults: {
                 duration: 1.25,
-                ease: 'hop',
+                ease: "hop",
               },
               onComplete: () => tl.kill(),
             });
 
             tl.to(data.next.container, {
-              clipPath: 'polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)',
+              clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
             });
 
             tl.to(
               data.next.container,
               {
                 '--clip': 'inset(0 0 100% 0)',
-                onStart: () => {
-                  this.motionTexts.animationIn();
-                },
               },
-              '<+=0.285'
+              '<+=0.485'
             );
 
             return new Promise((resolve) => {
@@ -571,12 +545,14 @@ class App {
             });
           },
           after: (data) => {
+            this.motionTexts.init();
+            this.motionTexts.animationIn();
+
             this.barbaWrapper.classList.remove('is__transitioning');
 
             data.next.container.classList.remove('contact__transition');
-
             gsap.set(data.next.container, {
-              clearProps: 'all',
+              clearProps: "all",
             });
           },
           sync: true,
@@ -602,7 +578,7 @@ class App {
   }
 
   addEventListeners() {
-    window.addEventListener('resize', this.onResize.bind(this));
+    window.addEventListener("resize", this.onResize.bind(this));
   }
 
   render() {
@@ -611,12 +587,12 @@ class App {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   preventLinksMenu();
 
   gsap.registerPlugin(SplitText, CustomEase, MorphSVGPlugin, DrawSVGPlugin);
 
-  CustomEase.create('hop', '0.56, 0, 0.35, 0.98');
+  CustomEase.create("hop", "0.56, 0, 0.35, 0.98");
 
   new App();
 });
