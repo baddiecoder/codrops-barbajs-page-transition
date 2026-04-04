@@ -539,8 +539,6 @@ class App {
             });
           },
           enter: (data) => {
-            this.motionTexts.destroy(); // destroy motion text on current container
-            this.motionTexts.init(data.next.container); // initialization motion text for next container
             const tl = gsap.timeline({
               defaults: {
                 duration: 1.25,
@@ -558,7 +556,11 @@ class App {
               {
                 '--clip': 'inset(0 0 100% 0)',
                 onStart: () => {
-                  this.motionTexts.animationIn();
+                  setTimeout(() => {
+                    this.motionTexts.destroy(); // destroy motion text on current container
+                    this.motionTexts.init(data.next.container); // initialization motion text for next container
+                    this.motionTexts.animationIn();
+                  }, 300) // will wait until the clip path animation is in the middle to start the motion text animation, you can adjust this timing to your preference
                 },
               },
               '<+=0.285'
