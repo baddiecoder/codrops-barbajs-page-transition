@@ -52,8 +52,6 @@ class App {
             });
           },
           enter: (data) => {
-            this.motionTexts.destroy(); // destroy motion text on current container
-            this.motionTexts.init(data.next.container); // initialization motion text for next container
             const contentCurrent =
               data.current.container.querySelector('.content__wrapper');
 
@@ -91,6 +89,8 @@ class App {
               .to(data.next.container, {
                 scale: 1,
                 onStart: () => {
+                  this.motionTexts.destroy(); // destroy motion text on current container
+                  this.motionTexts.init(data.next.container); // initialization motion text for next container
                   this.motionTexts.animationIn();
                 },
               });
@@ -555,16 +555,15 @@ class App {
               data.next.container,
               {
                 '--clip': 'inset(0 0 100% 0)',
-                onStart: () => {
-                  setTimeout(() => {
-                    this.motionTexts.destroy(); // destroy motion text on current container
-                    this.motionTexts.init(data.next.container); // initialization motion text for next container
-                    this.motionTexts.animationIn();
-                  }, 300) // will wait until the clip path animation is in the middle to start the motion text animation, you can adjust this timing to your preference
-                },
               },
               '<+=0.285'
             );
+
+            tl.call(() => {
+              this.motionTexts.destroy(); // destroy motion text on current container
+              this.motionTexts.init(data.next.container); // initialization motion text for next container
+              this.motionTexts.animationIn();
+            }, null, '<+=0.385');
 
             return new Promise((resolve) => {
               tl.call(() => {
