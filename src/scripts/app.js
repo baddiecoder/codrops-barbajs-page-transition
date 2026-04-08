@@ -29,10 +29,8 @@ class App {
     barba.init({
       transitions: [
         {
-          /* Reference 
-            The Site : https://cielrose.tv/about
-            You can take a look preview that transition at inspo.page
-          */
+          /* Reference: https://cielrose.tv/about
+           */
           name: 'default-transition',
           before: (data) => {
             this.barbaWrapper.classList.add('is__transitioning');
@@ -52,8 +50,7 @@ class App {
             });
           },
           enter: (data) => {
-            const contentCurrent =
-              data.current.container.querySelector('.content__wrapper');
+            const contentCurrent = data.current.container.querySelector('.content__wrapper');
 
             const tl = gsap.timeline({
               defaults: {
@@ -76,23 +73,25 @@ class App {
                   yPercent: -10,
                   ease: 'power3',
                 },
-                '<'
+                '<',
               )
               .to(
                 data.next.container,
                 {
                   clipPath: 'inset(0% 0 0 0)',
                   ease: 'power3',
+                  onStart: () => {
+                    this.motionTexts.init(data.next.container); // initialization motion text for next container
+                    this.motionTexts.animationIn();
+                  },
+                  onComplete: () => {
+                    this.motionTexts.destroy(); // destroy motion text on current container
+                  },
                 },
-                '<'
+                '<',
               )
               .to(data.next.container, {
                 scale: 1,
-                onStart: () => {
-                  this.motionTexts.destroy(); // destroy motion text on current container
-                  this.motionTexts.init(data.next.container); // initialization motion text for next container
-                  this.motionTexts.animationIn();
-                },
               });
 
             return new Promise((resolve) => {
@@ -111,10 +110,8 @@ class App {
           sync: true,
         },
         {
-          /* Reference
-            The Site : https://www.faint-film.com/
-            You can take a look preview that transition at inspo.page
-          */
+          /* Reference: https://www.faint-film.com/
+           */
           name: 'example-2-transition',
           to: {
             namespace: ['about'],
@@ -178,9 +175,8 @@ class App {
           },
         },
         {
-          /* Reference
-            The Site : https://codepen.io/GreenSock/full/EaKpEpJ
-          */
+          /* Reference: https://codepen.io/GreenSock/full/EaKpEpJ
+           */
           name: 'example-3-transition',
           to: {
             namespace: ['works'],
@@ -224,7 +220,7 @@ class App {
                 morphSVG: filledPath,
                 ease: 'sine',
               },
-              '<+=.5'
+              '<+=.5',
             );
 
             return new Promise((resolve) => {
@@ -277,7 +273,7 @@ class App {
                   this.motionTexts.animationIn();
                 },
               },
-              '<+=.5'
+              '<+=.5',
             );
 
             return new Promise((resolve) => {
@@ -289,10 +285,8 @@ class App {
           },
         },
         {
-          /* Reference
-            The Site : https://bloomparis.tv/our-services/
-            You can take a look preview that transition at inspo.page
-          */
+          /* Reference: https://bloomparis.tv/
+           */
           name: 'example-4-transition',
           to: {
             namespace: ['team'],
@@ -302,12 +296,9 @@ class App {
 
             this.transitionOverlay.classList.add('team__transition');
 
-            const nextDestination = data.next.url.path
-              .split('/')
-              .filter(Boolean)
-              .pop();
+            const nextDestination = data.next.url.path.split('/').filter(Boolean).pop();
 
-            this.titleDestination.innerHTML = `we're going to ${nextDestination}`;
+            //this.titleDestination.innerHTML = `we're going to ${nextDestination}`;
 
             if (this.splitTitleDestination) this.splitTitleDestination.revert();
 
@@ -320,9 +311,7 @@ class App {
             gsap.set(this.transitionOverlay, {
               '--clip': `polygon(0% ${50 - this.percentageVerticalClip}%, 0% ${
                 50 - this.percentageVerticalClip
-              }%, 0% ${50 + this.percentageVerticalClip}%, 0% ${
-                50 + this.percentageVerticalClip
-              }%)`,
+              }%, 0% ${50 + this.percentageVerticalClip}%, 0% ${50 + this.percentageVerticalClip}%)`,
             });
           },
           leave: () => {
@@ -343,9 +332,7 @@ class App {
             tl.to(this.transitionOverlay, {
               '--clip': `polygon(0 ${50 - this.percentageVerticalClip}%, 100% ${
                 50 - this.percentageVerticalClip
-              }%, 100% ${50 + this.percentageVerticalClip}%, 0 ${
-                50 + this.percentageVerticalClip
-              }%)`,
+              }%, 100% ${50 + this.percentageVerticalClip}%, 0 ${50 + this.percentageVerticalClip}%)`,
             });
 
             tl.to(this.transitionOverlay, {
@@ -399,7 +386,7 @@ class App {
                   this.motionTexts.animationIn();
                 },
               },
-              '<+0.25'
+              '<+0.25',
             );
 
             return new Promise((resolve) => {
@@ -412,9 +399,8 @@ class App {
           },
         },
         {
-          /* Reference
-            This transition is inspired by a transition from the Osmo page transition course : https://www.osmo.supply/product/page-transition-course
-          */
+          /* Reference: https://truus.co/
+           */
           name: 'example-5-transition',
           to: {
             namespace: ['archive'],
@@ -425,7 +411,7 @@ class App {
           leave: () => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1,
+                duration: 1.4,
                 ease: 'sine.inOut',
               },
               onComplete: () => tl.kill(),
@@ -439,7 +425,7 @@ class App {
 
             gsap.set('.svg__transition svg path', {
               drawSVG: '0% 0%',
-              attr: { 'stroke-width': 200 },
+              attr: { 'stroke-width': 100 },
               opacity: 0,
             });
 
@@ -453,17 +439,16 @@ class App {
               {
                 drawSVG: '0% 100%',
               },
-              '<'
+              '<',
             );
 
             tl.to(
               '.svg__transition svg path',
               {
-                attr: { 'stroke-width': 800 },
-                duration: 1.25,
+                attr: { 'stroke-width': 400 },
                 ease: 'sine.inOut',
               },
-              '<'
+              '<+=0.18',
             );
 
             return new Promise((resolve) => {
@@ -488,7 +473,7 @@ class App {
 
                 gsap.set('.svg__transition svg path', {
                   drawSVG: '0% 0%',
-                  attr: { 'stroke-width': 200 },
+                  attr: { 'stroke-width': 100 },
                 });
 
                 tl.kill();
@@ -496,7 +481,7 @@ class App {
             });
 
             tl.to('.svg__transition svg path', {
-              attr: { 'stroke-width': 200 },
+              attr: { 'stroke-width': 100 },
             });
 
             tl.to(
@@ -504,7 +489,7 @@ class App {
               {
                 drawSVG: '100% 100%',
               },
-              '<+=0.45'
+              '<+=0.45',
             );
 
             return new Promise((resolve) => {
@@ -516,10 +501,8 @@ class App {
           },
         },
         {
-          /* Reference
-            The Site : https://www.leandra-isler.ch/en
-            You can take a look preview that transition at inspo.page
-          */
+          /* Reference: https://www.leandra-isler.ch/
+           */
           name: 'example-6-transition',
           to: {
             namespace: ['contact'],
@@ -556,14 +539,18 @@ class App {
               {
                 '--clip': 'inset(0 0 100% 0)',
               },
-              '<+=0.285'
+              '<+=0.285',
             );
 
-            tl.call(() => {
-              this.motionTexts.destroy(); // destroy motion text on current container
-              this.motionTexts.init(data.next.container); // initialization motion text for next container
-              this.motionTexts.animationIn();
-            }, null, '<+=0.385');
+            tl.call(
+              () => {
+                this.motionTexts.destroy(); // destroy motion text on current container
+                this.motionTexts.init(data.next.container); // initialization motion text for next container
+                this.motionTexts.animationIn();
+              },
+              null,
+              '<+=0.385',
+            );
 
             return new Promise((resolve) => {
               tl.call(() => {
@@ -594,12 +581,12 @@ class App {
     const titleDestinationBound = this.titleDestination.getBoundingClientRect();
     const halfHeightTitleDestination = titleDestinationBound.height / 2;
     const halfHeightViewport = window.innerHeight / 2;
-    this.percentageVerticalClip =
-      (halfHeightTitleDestination / halfHeightViewport) * 50;
+    this.percentageVerticalClip = (halfHeightTitleDestination / halfHeightViewport) * 50;
   }
 
   onResize() {
     this.getPercentageVerticalClipExample3();
+    this.webglPageTransition.onResize();
   }
 
   addEventListeners() {

@@ -1,7 +1,10 @@
 ---
 import "../styles/app.css";
-import Header from "../components/header.astro";
-import { Font } from "astro:assets";
+import Frame from "../components/frame.astro";
+import Nav from "../components/nav.astro";
+import TransitionSvgWrapper from "../components/TransitionSvgWrapper.astro";
+import TransitionOverlay from "../components/TransitionOverlay.astro";
+import TransitionMorphSvg from "../components/TransitionMorphSvg.astro";
 const { uid } = Astro.props;
 ---
 
@@ -10,51 +13,22 @@ const { uid } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>Codrops Page Transition Barbajs + Astro</title>
-    <Font cssVariable="--font-neue-montreal" preload />
+    <title>Page Transitions with Astro, Barba.js and GSAP</title>
+    <link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico" />
   </head>
   <body data-barba="wrapper">
-    <Header />
+    <Frame />
     <div data-barba="container" data-barba-namespace={uid} class="app__wrapper">
       <main class="content__wrapper">
         <slot />
       </main>
     </div>
-    <canvas id="webgl"></canvas>
-    <div class="transition__svg__wrapper">
-      <div class="svg__transition">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3100"
-          height="2076"
-          viewBox="0 0 3100 2076"
-          fill="none"
-        >
-          <path
-            d="M1544.5 1046C1544.5 1046 1333.5 896.001 1250.5 1173.5C1167.5 1451 1512 1519 1722.5 1490.5C1933 1462 2133 1318 2133 1046C2133 773.999 1800 456.497 1467 456.497C1134 456.497 834.001 729.501 773.001 1107C712.001 1484.5 1034 1820.17 1250.5 1884.5C1467 1948.83 1760.5 1989.5 2016 1878.5C2271.5 1767.5 2609.88 1433.98 2571 996C2532.13 558.024 2042.36 127.813 1683.5 85.4998C1324.64 43.1866 1041 85.4996 773.001 285.5C505.001 485.501 269.469 856.833 346 1366.71C422.531 1876.59 820.717 2204.41 1250.5 2278.71C1680.28 2353.01 2223.9 2366.91 2571 2050.5C2918.11 1734.08 3159 1251.5 2976.5 566.499C2794 -118.503 1859.5 -454.5 1349 -460C838.5 -465.5 244.408 85.4997 30 557.712C-184.409 1029.92 -123 2052.5 177 2351.5"
-            stroke="none"
-            stroke-width="200"
-            stroke-linecap="round"></path>
-        </svg>
-      </div>
-    </div>
-    <div class="transition__overlay">
-      <h1 class="title__destination">we're going to</h1>
-    </div>
-    <div class="transition__morph__svg">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMin slice">
-        <path
-          stroke="none"
-          fill="none"
-          stroke-width="2px"
-          vector-effect="non-scaling-stroke"
-          d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
-          data-original-path="M 0 100 V 100 Q 50 100 100 100 V 100 z"></path>
-      </svg>
-    </div>
+    <Nav />
+    <TransitionSvgWrapper />
+    <TransitionOverlay />
+    <TransitionMorphSvg />
     <script src="../scripts/app.js"></script>
   </body>
 </html>
