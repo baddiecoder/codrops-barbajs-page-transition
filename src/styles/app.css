@@ -322,7 +322,7 @@ html,
 .svg__transition svg {
   display: block;
   width: 125%;
-  height: auto;
+  height: 100%;
   aspect-ratio: 1;
 }
 
@@ -365,20 +365,8 @@ html,
   visibility: hidden;
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-  .svg__transition svg {
-    width: 125%;
-    transform: scale(1.25);
-  }
-}
-
 @media screen and (max-width: 768px) {
   .transition__overlay .title__destination {
     font-size: clamp(1rem, 5vw, 2rem);
-  }
-
-  .svg__transition svg {
-    width: 150%;
-    transform: scale(1.5);
   }
 }
