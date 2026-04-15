@@ -243,9 +243,6 @@ html,
   line-height: 1;
 }
 
-.content p {
-}
-
 .content.about {
   background-color: var(--about-background);
   color: var(--about-text);
